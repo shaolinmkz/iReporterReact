@@ -6,7 +6,8 @@ module.exports = {
   entry: './src/app/index.js',
   output: {
     path: path.join(__dirname, 'public/dist/'),
-    filename: 'main.js'
+    filename: 'main.js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -35,9 +36,12 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    historyApiFallback: true,
+  },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/app/index.html',
+      template: './src/app/App.html',
       filename: 'index.html'
     }),
     new MiniCSSExtractPlugin({
