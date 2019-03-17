@@ -15,17 +15,50 @@ import NotFound from "../commonViews/404/404.jsx";
 const Router = () => (
   <div>
     <Switch>
-      <Route exact path="/" component={LandingPage} />
-      <Route path="/home" component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/howitworks" component={HowItWorks} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/admin" component={Admin} />
-      <Route path="/report" component={Report} />
-      <Route path="/displayrecord" component={DisplayRecord} />
-      <Route path="*" component={NotFound} />
+      {routeProps.map((route, index) => (
+        <Route exact path={route.path} component={route.component} key={index}/>
+      ))}
     </Switch>
   </div>
 );
 
 export default Router;
+
+const routeProps = [
+  {
+    path: '/',
+    component: LandingPage
+  },
+  {
+    path: '/home',
+    component: Home
+  },
+  {
+    path: '/about',
+    component: About
+  },
+  {
+    path: '/howitworks',
+    component: HowItWorks
+  },
+  {
+    path: '/profile',
+    component: Profile
+  },
+  {
+    path: '/admin',
+    component: Admin
+  },
+  {
+    path: '/report',
+    component: Report
+  },
+  {
+    path: '/displayrecord',
+    component: DisplayRecord
+  },
+  {
+    path: '*',
+    component: NotFound
+  }
+];

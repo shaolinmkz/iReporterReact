@@ -261,6 +261,7 @@ div.logo-container{
 }
 .main-nav{
   float: right;
+  top:  58px;
 }
 
 .main-nav ul li{
