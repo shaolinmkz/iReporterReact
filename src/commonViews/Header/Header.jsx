@@ -34,7 +34,7 @@ class Header extends Component {
     return (
       <header className="clearfix">
       <div className="clearfix logo-container">
-          <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839738/iReporter/ir.png" className="logo" />
+          <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839738/ir.png" className="logo" />
       </div>
       <span className="sitename"><label>i</label>Reporter</span>
       <nav className="main-nav clearfix" >
@@ -62,12 +62,12 @@ class Header extends Component {
           </ul>
       </nav>
       <img
-      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839739/iReporter/menu_icon.png"
+      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839739/menu_icon.png"
       id="open-hamburger"
       style={{display: this.state.hamburgerClose}}
       onClick={this.handleHamburger}/>
       <img
-      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839739/iReporter/menu_close_icon.png"
+      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839739/menu_close_icon.png"
       id="close-hamburger"
       style={{display: this.state.hamburgerOpen}}
       onClick={this.handleHamburger} />

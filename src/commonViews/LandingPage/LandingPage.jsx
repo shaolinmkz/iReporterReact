@@ -25,9 +25,9 @@ const Welcome = () => {
                 To get started fill the signup form.</p>
 
             <h1>
-              <label>i</label>See 
+              <label>i</label>See
               <label>i</label>Report
-              <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839750/iReporter/secure.png" className="secure" title="Secured Informations"/>
+              <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839750/secure.png" className="secure" title="Secured Informations"/>
             </h1>
         </article>
       <AuthForm />

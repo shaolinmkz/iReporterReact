@@ -346,7 +346,7 @@ div.logo-container{
 
 .body-container{
   padding: 0 100px 0 100px;
-  background: url("https://res.cloudinary.com/shaolinmkz/image/upload/v1550839742/iReporter/justice_keyboard.jpg");
+  background: url("https://res.cloudinary.com/shaolinmkz/image/upload/v1550839742/justice_keyboard.jpg");
   background-size: cover;
 }
 /*------ CRIME REPORT ------*/
@@ -665,7 +665,7 @@ input[type="button"]{
   background: #162661;
 }
 body.admin-body{
-  background: url("https://res.cloudinary.com/shaolinmkz/image/upload/v1550839738/iReporter/ir.png");
+  background: url("https://res.cloudinary.com/shaolinmkz/image/upload/v1550839738/ir.png");
   background-size: cover;
 }
 #admin{
@@ -973,7 +973,7 @@ input.location-input{
   margin: 10px 0;
 }
 .profile-body{
-  background: url("https://res.cloudinary.com/shaolinmkz/image/upload/v1550839782/iReporter/profile_bg.png");
+  background: url("https://res.cloudinary.com/shaolinmkz/image/upload/v1550839782/profile_bg.png");
   background-size: cover;
 }
 #profile{

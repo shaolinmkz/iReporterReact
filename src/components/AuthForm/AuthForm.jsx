@@ -67,7 +67,7 @@ export default class Login extends Component {
       <input type="password" name="password" placeholder="Password" onChange={this.handleLoginChange} required/>
       <span><input type="submit" value="Login" onSubmit={ (e) => e.preventDefault() } /></span>
       <img
-      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/iReporter/loader_blue.gif"
+      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
       className="loader"
       style={{display:'none', width: '20%'}}
       />
@@ -104,7 +104,7 @@ export default class Login extends Component {
       <input type="password" name="password" placeholder="Password" onChange={ this.handleSignupChange } required/>
       <input type="password" name="confirmPassword" placeholder="Confirm password" onChange={ this.handleSignupChange } required />
       <input type="submit" value="CREATE ACCOUNT" onSubmit={ (e) => e.preventDefault() } />
-      <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/iReporter/loader_blue.gif" className="loader" style={{display:'none', width: '20%'}}/>
+      <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif" className="loader" style={{display:'none', width: '20%'}}/>
       <br />
       <span className="theme-blue">Already have an account?</span>
       <br />
