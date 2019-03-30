@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 class Header extends Component {
   state = {
         hamburgerOpen: 'none',
-        hamburgerClose: 'inline-block',
+        hamburgerClose: 'none',
         navMobile: 'none'
       }
 
@@ -24,13 +24,19 @@ class Header extends Component {
   }
 
   componentDidMount () {
-  document.getElementsByTagName('body')[0].onresize = () => {
-    if (window.innerWidth <= 1000) {
-      this.setState({ hamburgerClose: 'inline-block', navMobile: 'none', hamburgerOpen: 'none'});
-    } else {
-      this.setState({ ...this.state, hamburgerClose: 'none', hamburgerOpen: 'none', navMobile: 'none'});
+    const body = document.querySelector('body');
+    body.onresize = () => {
+      if (window.innerWidth <= 1000) {
+        this.setState({ hamburgerClose: 'inline-block', navMobile: 'none', hamburgerOpen: 'none'});
+      } else {
+        this.setState({ ...this.state, hamburgerClose: 'none', hamburgerOpen: 'none', navMobile: 'none'});
+      }
     }
-  }
+    body.onload = () => {
+      if (window.innerWidth <= 1000) {
+          this.setState({ hamburgerClose: 'inline-block', navMobile: 'none', hamburgerOpen: 'none'});
+        }
+    }
   }
 
 
