@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 
@@ -48,7 +47,7 @@ export default class Login extends Component {
   renderForm = () => this.state.form === 'login' ? this.loginComp() : this.signUpComp();
 
   loginComp = () => (
-    <form className="signin-form clearfix">
+    <form className="signin-form clearfix" onSubmit={ (e) => { e.preventDefault(); } }>
         <h2>
           <span
             className="switch-signup"
@@ -65,7 +64,7 @@ export default class Login extends Component {
         </h2>
       <input type="text" name="emailUsername" placeholder="email or username" onChange={this.handleLoginChange} required />
       <input type="password" name="password" placeholder="Password" onChange={this.handleLoginChange} required/>
-      <span><input type="submit" value="Login" onSubmit={ (e) => e.preventDefault() } /></span>
+      <span><input type="submit" value="Login"/></span>
       <img
       src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
       className="loader"
@@ -80,7 +79,7 @@ export default class Login extends Component {
   );
 
   signUpComp = () => (
-    <form className="signup-form clearfix">
+    <form className="signup-form clearfix" onSubmit={ (e) => e.preventDefault() } >
       <h2>
         <span
         className="switch-signup"
@@ -103,7 +102,7 @@ export default class Login extends Component {
       <input type="number" name="phoneNumber" placeholder="Phone number" onChange={ this.handleSignupChange } required/>
       <input type="password" name="password" placeholder="Password" onChange={ this.handleSignupChange } required/>
       <input type="password" name="confirmPassword" placeholder="Confirm password" onChange={ this.handleSignupChange } required />
-      <input type="submit" value="CREATE ACCOUNT" onSubmit={ (e) => e.preventDefault() } />
+      <input type="submit" value="CREATE ACCOUNT"/>
       <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif" className="loader" style={{display:'none', width: '20%'}}/>
       <br />
       <span className="theme-blue">Already have an account?</span>
