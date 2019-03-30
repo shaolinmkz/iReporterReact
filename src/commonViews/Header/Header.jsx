@@ -24,7 +24,7 @@ class Header extends Component {
   }
 
   componentDidMount () {
-  document.getElementById('body').onresize = () => {
+  document.getElementsByTagName('body')[0].onresize = () => {
     if (window.innerWidth <= 1000) {
       this.setState({ hamburgerClose: 'inline-block', navMobile: 'none', hamburgerOpen: 'none'});
     } else {
