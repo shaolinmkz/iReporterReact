@@ -1,7 +1,6 @@
-/* eslint-disable require-jsdoc */
 import '../../app/App.css';
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 
 class Header extends Component {
@@ -52,9 +51,9 @@ class Header extends Component {
           <ul className="clearfix" id="desktop-nav">
             {navPath.map((link, index) => (
               <li key={index}>
-                <Link to={link.to}>
+                <NavLink to={link.to}>
                 {link.value}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
