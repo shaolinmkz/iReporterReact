@@ -1,10 +1,6 @@
 {
  "root": true,
- "extends": [
-  "airbnb-base",
-  "eslint:recommended",
-  "plugin:react/recommended"
- ],
+ "extends": ["airbnb-base", "eslint:recommended", "plugin:react/recommended"],
  "env": {
   "node": true,
   "es6": true,
@@ -12,9 +8,7 @@
   "browser": true
  },
  "rules": {
-  "indent": [
-   2, 2
-  ],
+  "indent": [2, 2],
   "react/jsx-uses-react": "error",
   "react/jsx-uses-vars": "error",
   "one-var": 0,
@@ -24,22 +18,31 @@
   "no-param-reassign": 0,
   "comma-dangle": 0,
   "curly": ["error", "multi-line"],
-  "import/no-unresolved": [2, {
-   "commonjs": true
-  }],
-  "valid-jsdoc": ["error", {
-   "requireReturn": true,
-   "requireReturnType": true,
-   "requireParamDescription": false,
-   "requireReturnDescription": true
-  }],
-  "require-jsdoc": ["error", {
-   "require": {
-    "FunctionDeclaration": true,
-    "MethodDefinition": true,
-    "ClassDeclaration": true
+  "import/no-unresolved": [
+   2,
+   {
+    "commonjs": true
    }
-  }]
+  ],
+  "valid-jsdoc": [
+   "error",
+   {
+    "requireReturn": true,
+    "requireReturnType": true,
+    "requireParamDescription": false,
+    "requireReturnDescription": true
+   }
+  ],
+  "require-jsdoc": [
+   "error",
+   {
+    "require": {
+     "FunctionDeclaration": true,
+     "MethodDefinition": true,
+     "ClassDeclaration": true
+    }
+   }
+  ]
  },
  "settings": {
   "react": {
@@ -71,7 +74,5 @@
    "jsx": true
   }
  },
- "plugins": [
-  "react"
- ]
+ "plugins": ["react"]
 }
