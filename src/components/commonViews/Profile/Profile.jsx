@@ -151,7 +151,7 @@ class Profile extends Component {
    * @return {JSX} returns JSX
    */
   render() {
-    document.getElementById("site-title").innerHTML = 'Profile';
+    // document.getElementById("site-title").innerHTML = 'Profile';
     return (
       <React.Fragment>
         <section className="profile" id="profile">

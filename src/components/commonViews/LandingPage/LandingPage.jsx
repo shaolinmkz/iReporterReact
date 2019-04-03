@@ -6,7 +6,7 @@ import AuthForm from "../../AuthForm/AuthForm.jsx";
  * @return {JSX} return JSX
  */
 const Welcome = () => {
-  document.getElementById("site-title").innerHTML = "Welcome";
+  // document.getElementById("site-title").innerHTML = "Welcome";
   return (
     <section className="body-container clearfix">
       <h1>
