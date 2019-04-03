@@ -334,14 +334,10 @@ div.logo-container{
 #mobile-nav ul li:hover a{
   color: #ffffff;
 }
-#current,
-#mobile-current{
+
+.main-nav ul li a.active{
   color: #fe0100;
   font-weight: bold;
-}
-#mobile-current{
-  color: white;
-   background: #fe0100;
 }
 
 .body-container{
@@ -1200,6 +1196,10 @@ footer{
  .visitors-message ul{
    padding: 0 1em;
  }
+ .main-nav ul li a.active{
+  background: #fe0100;
+  color: white;
+}
   .visitors-message{
     width: 90%;
     float: none;

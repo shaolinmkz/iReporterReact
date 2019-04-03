@@ -1,9 +1,12 @@
-import React from 'react';
+import React from "react";
 
-const Home = () => (
-	<div>
-		<h1>Home Page</h1>
-	</div>
-);
+const Home = () => {
+  document.getElementById("site-title").innerHTML = "Home";
+  return (
+    <div>
+      <h1>Home Page</h1>
+    </div>
+  );
+};
 
 export default Home;

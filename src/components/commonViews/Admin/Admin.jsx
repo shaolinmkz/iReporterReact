@@ -122,6 +122,7 @@ class Admin extends Component {
    * @returns {JSX} JSX
    */
   render() {
+    document.getElementById("site-title").innerHTML = "Admin";
     return (
       <React.Fragment>
         <section className="admin profile" id="admin">

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const navPath = [
   {
@@ -27,7 +27,7 @@ const navPath = [
     value: "admin"
   },
   {
-    to: "/",
+    to: "/signout",
     value: "signout"
   }
 ];
@@ -90,7 +90,7 @@ class Header extends Component {
    * @return {undefined}
    */
   handleHamburger() {
-    const state = this.state;
+    const { state } = this;
     this.state.hamburgerClose === "inline-block"
       ? this.setState({
         ...state,
@@ -138,7 +138,7 @@ class Header extends Component {
           <ul className="clearfix" id="desktop-nav">
             {navPath.map((link, index) => (
               <li key={index}>
-                <Link to={link.to}>{link.value}</Link>
+                <NavLink to={link.to}>{link.value}</NavLink>
               </li>
             ))}
           </ul>
@@ -153,9 +153,9 @@ class Header extends Component {
           <ul className="clearfix">
             {navPath.map((link, index) => (
               <li key={index}>
-                <Link to={link.to} onClick={this.handleOnclick}>
+                <NavLink to={link.to} onClick={this.handleOnclick}>
                   {link.value}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
