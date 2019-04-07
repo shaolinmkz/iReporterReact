@@ -35,8 +35,14 @@ describe("Test the header component", () => {
     global.innerWidth = 1200;
     global.dispatchEvent(new Event("resize"));
     HeaderComp.instance().componentDidMount();
+
+    global.dispatchEvent(new Event("load"));
+    HeaderComp.instance().componentDidMount();
   });
   it("It should call the handleHamburger method in the header component", () => {
+    // Test for first hamburger click
+    HeaderComp.instance().handleHamburger();
+    // Test for second hamburger click
     HeaderComp.instance().handleHamburger();
   });
 });

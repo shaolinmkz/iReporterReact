@@ -5,7 +5,7 @@ import React from "react";
  * @returns {JSX} JSX
  */
 const NotFound = () => {
-  // document.getElementById("site-title").innerHTML = "Page Not Found"; 
+  document.title = "Page Not Found"; 
   return (
     <div style={{ textAlign: "center", marginTop: "5%" }}>
       <img

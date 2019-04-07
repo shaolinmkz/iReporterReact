@@ -235,7 +235,7 @@ class Report extends Component {
    * @return {JSX}JSX
    */
   render() {
-    document.getElementById("site-title").innerHTML = "Report";
+    document.title = "Report";
     return (
       <React.Fragment>
         <section

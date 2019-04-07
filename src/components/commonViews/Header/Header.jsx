@@ -58,7 +58,7 @@ class Header extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    const body = document.querySelector("body");
+    const body = document.body;
     body.onresize = () => {
       if (window.innerWidth <= 1000) {
         this.setState({

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
  * @returns {JSX} JSX
  */
 const About = () => {
-  // document.getElementById("site-title").innerHTML = "About";
+  document.title = "About";
   return (
     <div>
       <article className="actual-post" id="about">
