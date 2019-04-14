@@ -1,13 +1,19 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
+const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
+require('dotenv').config();
 
-module.exports = {
+module.exports = (env) => ({
   entry: './src/app/index.js',
   output: {
-    path: path.join(__dirname, 'public/dist/'),
+    path: path.join(__dirname, 'dist'),
     filename: 'main.js',
     publicPath: '/'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css']
   },
   module: {
     rules: [
@@ -33,12 +39,13 @@ module.exports = {
           MiniCSSExtractPlugin.loader,
           'css-loader'
         ]
-      }
+      },
     ]
   },
   devServer: {
     historyApiFallback: true,
   },
+  devtool: env.production ? 'source-maps' : 'eval',
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/app/App.html',
@@ -46,6 +53,10 @@ module.exports = {
     }),
     new MiniCSSExtractPlugin({
       filename: 'style.css'
+    }),
+    new Dotenv(),
+    new webpack.DefinePlugin({
+      'process.env.SECRET_KEY': JSON.stringify(process.env.SECRET_KEY)
     })
   ]
-}
+});
