@@ -1,19 +1,23 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
-const Dotenv = require('dotenv-webpack');
-const webpack = require('webpack');
-require('dotenv').config();
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
+const Dotenv = require("dotenv-webpack");
+const webpack = require("webpack");
+require("dotenv").config();
 
-module.exports = (env) => ({
-  entry: './src/app/index.js',
+module.exports = env => ({
+  entry: "./src/app/index.js",
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'main.js',
-    publicPath: '/'
+    path: path.resolve(__dirname, "dist"),
+    filename: "main.js",
+    publicPath: "/"
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.json', '.css']
+    extensions: [".js", ".jsx", ".json", ".css"]
+  },
+  node: {
+    net: "empty",
+    fs: "empty"
   },
   module: {
     rules: [
@@ -26,37 +30,36 @@ module.exports = (env) => ({
       },
       {
         test: /\.(html)$/,
-        use: [{
-          loader: 'html-loader',
-          options: {
-            minimize: true
+        use: [
+          {
+            loader: "html-loader",
+            options: {
+              minimize: true
+            }
           }
-        }]
+        ]
       },
       {
         test: /\.(css|scss)$/,
-        use: [
-          MiniCSSExtractPlugin.loader,
-          'css-loader'
-        ]
-      },
+        use: [MiniCSSExtractPlugin.loader, "css-loader"]
+      }
     ]
   },
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: true
   },
-  devtool: env.production ? 'source-maps' : 'eval',
+  devtool: env.production ? "source-maps" : "eval",
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/app/App.html',
-      filename: 'index.html'
+      template: "./src/app/App.html",
+      filename: "index.html"
     }),
     new MiniCSSExtractPlugin({
-      filename: 'style.css'
+      filename: "style.css"
     }),
     new Dotenv(),
     new webpack.DefinePlugin({
-      'process.env.SECRET_KEY': JSON.stringify(process.env.SECRET_KEY)
+      "process.env.SECRET_KEY": JSON.stringify(process.env.SECRET_KEY)
     })
   ]
 });
