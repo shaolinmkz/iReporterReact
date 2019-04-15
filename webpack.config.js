@@ -24,15 +24,9 @@ module.exports = env => ({
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: [
-          'babel-loader',
-          {
-            loader: 'eslint-loader',
-            options: {
-              useEslintrc: true
-            }
-          }
-        ]
+        use: {
+          loader: "babel-loader"
+        }
       },
       {
         test: /\.(html)$/,
@@ -47,7 +41,12 @@ module.exports = env => ({
       },
       {
         test: /\.(css|scss)$/,
-        use: ['style-loader', MiniCSSExtractPlugin.loader, "css-loader", "sass-loader"]
+        use: [
+          "style-loader",
+          MiniCSSExtractPlugin.loader,
+          "css-loader",
+          "sass-loader"
+        ]
       }
     ]
   },
@@ -67,5 +66,5 @@ module.exports = env => ({
   ],
   devServer: {
     historyApiFallback: true
-  },
+  }
 });
