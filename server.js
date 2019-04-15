@@ -10,7 +10,7 @@ app.get('*', (req, res) => {
 });
 
 // Set port
-const port = parseInt(process.env.PORT);
+const port = parseInt(process.env.PORT, 10) || 4080;
 
 // Set app to listen at port
 app.listen(port);

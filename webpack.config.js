@@ -6,10 +6,10 @@ const webpack = require("webpack");
 require("dotenv").config();
 
 module.exports = env => ({
-  entry: "./src/app/index.js",
+  entry: "./src/app/index.jsx",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.js",
+    filename: "bundle.js",
     publicPath: "/"
   },
   resolve: {
@@ -24,9 +24,15 @@ module.exports = env => ({
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
+        use: [
+          'babel-loader',
+          {
+            loader: 'eslint-loader',
+            options: {
+              useEslintrc: true
+            }
+          }
+        ]
       },
       {
         test: /\.(html)$/,
@@ -41,12 +47,9 @@ module.exports = env => ({
       },
       {
         test: /\.(css|scss)$/,
-        use: [MiniCSSExtractPlugin.loader, "css-loader"]
+        use: ['style-loader', MiniCSSExtractPlugin.loader, "css-loader", "sass-loader"]
       }
     ]
-  },
-  devServer: {
-    historyApiFallback: true
   },
   devtool: env.production ? "source-maps" : "eval",
   plugins: [
@@ -55,11 +58,14 @@ module.exports = env => ({
       filename: "index.html"
     }),
     new MiniCSSExtractPlugin({
-      filename: "style.css"
+      filename: "./style.css"
     }),
     new Dotenv(),
     new webpack.DefinePlugin({
       "process.env.SECRET_KEY": JSON.stringify(process.env.SECRET_KEY)
     })
-  ]
+  ],
+  devServer: {
+    historyApiFallback: true
+  },
 });
