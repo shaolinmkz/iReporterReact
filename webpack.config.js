@@ -10,7 +10,7 @@ module.exports = env => ({
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
-    publicPath: "/"
+    publicPath: "./"
   },
   resolve: {
     extensions: [".js", ".jsx", ".json", ".css"]
@@ -46,6 +46,19 @@ module.exports = env => ({
           MiniCSSExtractPlugin.loader,
           "css-loader"
         ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: '[name].[ext]',
+              outputPath: './assets/img/'
+            }
+          }
+        ]
       }
     ]
   },
@@ -56,7 +69,7 @@ module.exports = env => ({
       filename: "index.html"
     }),
     new MiniCSSExtractPlugin({
-      filename: "./style.css"
+      filename: "style.css"
     }),
     new Dotenv(),
     new webpack.DefinePlugin({
