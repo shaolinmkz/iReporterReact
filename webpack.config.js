@@ -44,8 +44,7 @@ module.exports = env => ({
         use: [
           "style-loader",
           MiniCSSExtractPlugin.loader,
-          "css-loader",
-          "sass-loader"
+          "css-loader"
         ]
       }
     ]
