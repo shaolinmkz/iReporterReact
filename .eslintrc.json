@@ -1,11 +1,15 @@
 {
  "root": true,
- "extends": ["airbnb-base", "eslint:recommended", "plugin:react/recommended"],
  "env": {
   "node": true,
   "es6": true,
-  "mocha": true,
-  "browser": true
+  "browser": true,
+  "jest": true
+ },
+ "extends": ["airbnb-base", "eslint:recommended", "plugin:react/recommended"],
+ "globals": {
+  "Atomics": "readonly",
+  "SharedArrayBuffer": "readonly"
  },
  "rules": {
   "indent": [2, 2],
@@ -38,6 +42,7 @@
    {
     "require": {
      "FunctionDeclaration": true,
+     "ArrowFunctionExpression": true,
      "MethodDefinition": true,
      "ClassDeclaration": true
     }
@@ -72,7 +77,10 @@
  "parserOptions": {
   "ecmaFeatures": {
    "jsx": true
-  }
+  },
+  "ecmaVersion": 2017,
+  "sourceType": "module"
  },
- "plugins": ["react"]
+ "plugins": ["react"],
+ "parser": "babel-eslint"
 }

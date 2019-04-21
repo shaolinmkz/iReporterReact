@@ -12,6 +12,10 @@ import NotFound from "../components/commonViews/404/404.jsx";
 
 const routeProps = [
   {
+    path: "/signout",
+    component: LandingPage
+  },
+  {
     path: "/",
     component: LandingPage
   },

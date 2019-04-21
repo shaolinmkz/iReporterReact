@@ -1,13 +1,23 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
+const Dotenv = require("dotenv-webpack");
+const webpack = require("webpack");
+require("dotenv").config();
 
-module.exports = {
-  entry: './src/app/index.js',
+module.exports = env => ({
+  entry: "./src/app/index.jsx",
   output: {
-    path: path.join(__dirname, 'public/dist/'),
-    filename: 'main.js',
-    publicPath: '/'
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    publicPath: "/"
+  },
+  resolve: {
+    extensions: [".js", ".jsx", ".json", ".css"]
+  },
+  node: {
+    net: "empty",
+    fs: "empty"
   },
   module: {
     rules: [
@@ -20,32 +30,53 @@ module.exports = {
       },
       {
         test: /\.(html)$/,
-        use: [{
-          loader: 'html-loader',
-          options: {
-            minimize: true
+        use: [
+          {
+            loader: "html-loader",
+            options: {
+              minimize: true
+            }
           }
-        }]
+        ]
       },
       {
         test: /\.(css|scss)$/,
+        use: ["style-loader", MiniCSSExtractPlugin.loader, "css-loader"]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
-          MiniCSSExtractPlugin.loader,
-          'css-loader'
+          {
+            loader: "url-loader",
+            options: {
+              limit: 10000,
+              name: "[name].[ext]",
+              outputPath: "./assets/img/"
+            }
+          }
         ]
       }
     ]
   },
-  devServer: {
-    historyApiFallback: true,
-  },
+  devtool: env.production ? "source-maps" : "eval",
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/app/App.html',
-      filename: 'index.html'
+      template: "./src/app/App.html",
+      filename: "index.html"
     }),
     new MiniCSSExtractPlugin({
-      filename: 'style.css'
+      filename: "style.css"
+    }),
+    new Dotenv(),
+    new webpack.DefinePlugin({
+      "process.env.SECRET_KEY": JSON.stringify(process.env.SECRET_KEY),
+      "process.env.GOOGLE_API_KEY": JSON.stringify(process.env.GOOGLE_API_KEY),
+      "process.env.CLOUDINARY_IMAGE_UPLOAD_URL": JSON.stringify(process.env.CLOUDINARY_IMAGE_UPLOAD_URL),
+      "process.env.CLOUDINARY_VIDEO_UPLOAD_URL": JSON.stringify(process.env.CLOUDINARY_VIDEO_UPLOAD_URL),
+      "process.env.CLOUDINARY_UPLOAD_PRESET": JSON.stringify(process.env.CLOUDINARY_UPLOAD_PRESET)
     })
-  ]
-}
+  ],
+  devServer: {
+    historyApiFallback: true
+  }
+});

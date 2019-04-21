@@ -6,6 +6,7 @@ import AuthForm from "../../AuthForm/AuthForm.jsx";
  * @return {JSX} return JSX
  */
 const Welcome = () => {
+  document.title = "Welcome";
   return (
     <section className="body-container clearfix">
       <h1>

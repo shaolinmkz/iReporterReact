@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { bool, func } from "prop-types";
+import { connect } from "react-redux";
+import { logoutUserAction } from "../../../redux/actionCreators/authActions";
 
 const navPath = [
   {
@@ -21,22 +25,26 @@ const navPath = [
   {
     to: "/profile",
     value: "profile"
+  }
+];
+
+const navPathOffline = [
+  {
+    to: "/howitworks",
+    value: "howitworks"
   },
   {
-    to: "/admin",
-    value: "admin"
-  },
-  {
-    to: "/",
-    value: "signout"
+    to: "/about",
+    value: "about"
   }
 ];
 
 /**
  * @description stateless component that handles the header
+ * @param {object} e
  * @return {undefined}
  */
-class Header extends Component {
+export class Header extends Component {
   /**
    * @description header constructor
    * @param {object} props - header props
@@ -58,7 +66,7 @@ class Header extends Component {
    * @returns {undefined}
    */
   componentDidMount() {
-    const body = document.querySelector("body");
+    const body = document.body;
     body.onresize = () => {
       if (window.innerWidth <= 1000) {
         this.setState({
@@ -90,7 +98,7 @@ class Header extends Component {
    * @return {undefined}
    */
   handleHamburger() {
-    const state = this.state;
+    const { state } = this;
     this.state.hamburgerClose === "inline-block"
       ? this.setState({
         ...state,
@@ -117,12 +125,19 @@ class Header extends Component {
     });
   }
 
+  handleSignout = e => {
+    e.preventDefault();
+    const { logoutUser } = this.props;
+    logoutUser();
+  };
+
   /**
    * @description method that renders the header component
    * @return {JSX} return JSX
    */
   render() {
     const { navMobile } = this.state;
+    const { isLoggedIn, isAdmin } = this.props;
     return (
       <header className="clearfix">
         <div className="clearfix logo-container">
@@ -136,11 +151,47 @@ class Header extends Component {
         </span>
         <nav className="main-nav clearfix">
           <ul className="clearfix" id="desktop-nav">
-            {navPath.map((link, index) => (
-              <li key={index}>
-                <Link to={link.to}>{link.value}</Link>
+            {isLoggedIn &&
+              navPath.map((link, index) => (
+                <li key={index}>
+                  <NavLink exact to={link.to}>
+                    {link.value}
+                  </NavLink>
+                </li>
+              ))}
+            {!isLoggedIn &&
+              navPathOffline.map((link, index) => (
+                <li key={index}>
+                  <NavLink exact to={link.to}>
+                    {link.value}
+                  </NavLink>
+                </li>
+              ))}
+            {isAdmin && (
+              <li>
+                <NavLink exact to="/admin">
+                  admin
+                </NavLink>
               </li>
-            ))}
+            )}
+            {isLoggedIn && (
+              <li>
+                <NavLink
+                  exact
+                  to="#"
+                  onClick={this.handleSignout}
+                  id="signout_online_desktop">
+                  signout
+                </NavLink>
+              </li>
+            )}
+            {!isLoggedIn && (
+              <li>
+                <NavLink exact to="/">
+                  get started
+                </NavLink>
+              </li>
+            )}
           </ul>
         </nav>
 
@@ -151,13 +202,47 @@ class Header extends Component {
             display: navMobile
           }}>
           <ul className="clearfix">
-            {navPath.map((link, index) => (
-              <li key={index}>
-                <Link to={link.to} onClick={this.handleOnclick}>
-                  {link.value}
-                </Link>
+            {isLoggedIn &&
+              navPath.map((link, index) => (
+                <li key={index}>
+                  <NavLink exact to={link.to} onClick={this.handleOnclick}>
+                    {link.value}
+                  </NavLink>
+                </li>
+              ))}
+            {!isLoggedIn &&
+              navPathOffline.map((link, index) => (
+                <li key={index}>
+                  <NavLink exact to={link.to}>
+                    {link.value}
+                  </NavLink>
+                </li>
+              ))}
+            {isLoggedIn === isAdmin && (
+              <li>
+                <NavLink exact to="/admin">
+                  admin
+                </NavLink>
               </li>
-            ))}
+            )}
+            {isLoggedIn && (
+              <li>
+                <NavLink
+                  exact
+                  to="#"
+                  onClick={this.handleSignout}
+                  id="signout_online_mobile">
+                  signout
+                </NavLink>
+              </li>
+            )}
+            {!isLoggedIn && (
+              <li>
+                <NavLink exact to="/">
+                  get started
+                </NavLink>
+              </li>
+            )}
           </ul>
         </nav>
         <img
@@ -182,4 +267,39 @@ class Header extends Component {
   }
 }
 
-export default Header;
+/**
+ * @description map dispatch to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+export const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      logoutUser: logoutUserAction
+    },
+    dispatch
+  );
+
+/**
+ * @description Map state to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+export const mapStateToProps = ({ userData }) => {
+  const { isLoggedIn, isAdmin } = userData;
+  return {
+    isLoggedIn,
+    isAdmin
+  };
+};
+
+Header.propTypes = {
+  isLoggedIn: bool.isRequired,
+  logoutUser: func.isRequired,
+  isAdmin: bool.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

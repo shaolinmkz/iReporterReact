@@ -1,10 +1,20 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { func, bool } from "prop-types";
+// import { Redirect } from 'react-router-dom';
+import {
+  authUserLoginAction,
+  authUserSignupAction,
+  authLoading
+} from "../../redux/actionCreators/authActions";
 
 /**
  * @description stateful class based component that handles authentication
  * @return {undefined}
  */
-export default class AuthForm extends Component {
+export class AuthForm extends Component {
   /**
    * @description method that manages component state
    * @param {object} props - component properties
@@ -28,14 +38,6 @@ export default class AuthForm extends Component {
       },
       form: "login" // default form displayed
     };
-    this.handleLoginChange = this.handleLoginChange.bind(this);
-    this.handleSignupChange = this.handleSignupChange.bind(this);
-    this.renderForm = this.renderForm.bind(this);
-    this.switchForm = this.switchForm.bind(this);
-    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
-    this.handleSignupSubmit = this.handleSignupSubmit.bind(this);
-    this.loginComp = this.loginComp.bind(this);
-    this.signUpComp = this.signUpComp.bind(this);
   }
 
   /**
@@ -43,43 +45,43 @@ export default class AuthForm extends Component {
    * @param {object} e
    * @return {undefined}
    */
-  handleLoginChange(e) {
+  handleLoginChange = e => {
     this.setState({
       login: {
         ...this.state.login,
         [e.target.name]: e.target.value
       }
     });
-  }
+  };
 
   /**
    * @description handles the signup unchnage
    * @param {object} e
    * @return {undefined}
    */
-  handleSignupChange(e) {
+  handleSignupChange = e => {
     this.setState({
       signup: {
         ...this.state.signup,
         [e.target.name]: e.target.value
       }
     });
-  }
+  };
 
   /**
    * @description handles the auth form render
    * @return {undefined}
    */
-  renderForm() {
+  renderForm = () => {
     return this.state.form === "login" ? this.loginComp() : this.signUpComp();
-  }
+  };
 
   /**
    * @description handles auth form switching
    * @param {object} e
    * @return {undefined}
    */
-  switchForm(e) {
+  switchForm = e => {
     if (RegExp(e.target.className).test("switch-signup")) {
       e.target.parentNode.parentNode.reset();
       this.setState({ form: "signup" });
@@ -87,21 +89,40 @@ export default class AuthForm extends Component {
       e.target.parentNode.parentNode.reset();
       this.setState({ form: "login" });
     }
-  }
+  };
+
+  /**
+   * @description handles auth form switching
+   * @param {object} e
+   * @return {undefined}
+   */
+  switchFormBelowSignup = e => {
+    this.setState({ form: "signup" });
+    e.target.parentNode.reset();
+  };
+
+  /**
+   * @description handles auth form switching
+   * @param {object} e
+   * @return {undefined}
+   */
+  switchFormBelowLogin= e => {
+    this.setState({ form: "login" });
+    e.target.parentNode.reset();
+  };
 
   /**
    * @description handles login form submit
    * @param {object} e
    * @return {undefined}
    */
-  handleLoginSubmit(e) {
+  handleLoginSubmit = e => {
     e.preventDefault();
-    alert(
-      `Logged in! =>
-      ${this.state.login.emailUsername},
-      ${this.state.login.password}`
-    );
-  }
+    const { login } = this.state;
+    const { authLoginUser, authLoader } = this.props;
+    authLoader();
+    authLoginUser(login);
+  };
 
   /**
    * @description handles signup form submit
@@ -110,11 +131,10 @@ export default class AuthForm extends Component {
    */
   handleSignupSubmit(e) {
     e.preventDefault();
-    alert(
-      "Registered! =>",
-      this.state.signup.email,
-      this.state.signup.username
-    );
+    const { signup } = this.state;
+    const { authSignupUser, authLoader } = this.props;
+    authLoader();
+    authSignupUser(signup);
   }
 
   /**
@@ -122,12 +142,9 @@ export default class AuthForm extends Component {
    * @return {JSX} returns jsx
    */
   loginComp() {
+    const { loading } = this.props;
     return (
-      <form
-        className="signin-form clearfix"
-        onSubmit={e => {
-          this.handleLoginSubmit(e);
-        }}>
+      <form className="signin-form clearfix" onSubmit={this.handleLoginSubmit}>
         <h2>
           <span
             className="switch-signup"
@@ -163,16 +180,15 @@ export default class AuthForm extends Component {
           required
         />
         <span>
-          <input type="submit" value="Login" />
+          {!loading && <input id="loginSubmit" type="submit" value="Login" />}
         </span>
-        <img
-          src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
-          className="loader"
-          style={{
-            display: "none",
-            width: "20%"
-          }}
-        />
+        {loading && (
+          <img
+            src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
+            className="loader"
+            style={{ width: "20%" }}
+          />
+        )}
         <br />
         <span className="theme-blue">New user?</span>
         <br />
@@ -180,10 +196,7 @@ export default class AuthForm extends Component {
         <input
           type="button"
           title="new user sign-up"
-          onClick={e => {
-            this.setState({ form: "signup" });
-            e.target.parentNode.reset();
-          }}
+          onClick={this.switchFormBelowSignup}
           className="switch-signup theme-orange deactivate"
           value="Create an account here"
         />
@@ -196,6 +209,7 @@ export default class AuthForm extends Component {
    * @return {JSX} returns jsx
    */
   signUpComp() {
+    const { loading } = this.props;
     return (
       <form
         className="signup-form clearfix"
@@ -276,15 +290,14 @@ export default class AuthForm extends Component {
           onChange={this.handleSignupChange}
           required
         />
-        <input type="submit" value="CREATE ACCOUNT" />
-        <img
-          src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
-          className="loader"
-          style={{
-            display: "none",
-            width: "20%"
-          }}
-        />
+        {!loading && <input type="submit" value="CREATE ACCOUNT" />}
+        {loading && (
+          <img
+            src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
+            className="loader"
+            style={{ width: "20%" }}
+          />
+        )}
         <br />
         <span className="theme-blue">Already have an account?</span>
         <br />
@@ -292,10 +305,7 @@ export default class AuthForm extends Component {
         <input
           type="button"
           title="existing user signin"
-          onClick={e => {
-            this.setState({ form: "login" });
-            e.target.parentNode.reset();
-          }}
+          onClick={this.switchFormBelowLogin}
           className="switch-signin deactivate"
           value="Sign in here"
         />
@@ -308,6 +318,52 @@ export default class AuthForm extends Component {
    * @return {JSX} returns javascript syntax extension
    */
   render() {
-    return <React.Fragment>{this.renderForm()}</React.Fragment>;
+    const { isLoggedIn } = this.props;
+    if (isLoggedIn) {
+      return <Redirect to="/home" />;
+    }
+    return <Fragment>{this.renderForm()}</Fragment>;
   }
 }
+
+/**
+ * @description map dispatch to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      authLoginUser: authUserLoginAction,
+      authSignupUser: authUserSignupAction,
+      authLoader: authLoading
+    },
+    dispatch
+  );
+
+/**
+ * @description Map state to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+const mapStateToProps = ({ authData, userData }) => {
+  const { loading } = authData;
+  const { isLoggedIn } = userData;
+  return {
+    loading,
+    isLoggedIn
+  };
+};
+
+AuthForm.propTypes = {
+  authLoginUser: func.isRequired,
+  authSignupUser: func.isRequired,
+  authLoader: func.isRequired,
+  loading: bool.isRequired,
+  isLoggedIn: bool.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthForm);
