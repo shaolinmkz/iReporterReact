@@ -44,7 +44,7 @@ const navPathOffline = [
  * @param {object} e
  * @return {undefined}
  */
-class Header extends Component {
+export class Header extends Component {
   /**
    * @description header constructor
    * @param {object} props - header props
@@ -167,7 +167,7 @@ class Header extends Component {
                   </NavLink>
                 </li>
               ))}
-            {isLoggedIn === isAdmin && (
+            {isAdmin && (
               <li>
                 <NavLink exact to="/admin">
                   admin
@@ -176,7 +176,11 @@ class Header extends Component {
             )}
             {isLoggedIn && (
               <li>
-                <NavLink exact to="#" onClick={this.handleSignout}>
+                <NavLink
+                  exact
+                  to="#"
+                  onClick={this.handleSignout}
+                  id="signout_online_desktop">
                   signout
                 </NavLink>
               </li>
@@ -223,7 +227,11 @@ class Header extends Component {
             )}
             {isLoggedIn && (
               <li>
-                <NavLink exact to="#" onClick={this.handleSignout}>
+                <NavLink
+                  exact
+                  to="#"
+                  onClick={this.handleSignout}
+                  id="signout_online_mobile">
                   signout
                 </NavLink>
               </li>
@@ -264,7 +272,7 @@ class Header extends Component {
  * @param {object} dispatch
  * @return {JSX} returns javascript syntax extension
  */
-const mapDispatchToProps = dispatch =>
+export const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       logoutUser: logoutUserAction
@@ -277,7 +285,7 @@ const mapDispatchToProps = dispatch =>
  * @param {object} dispatch
  * @return {JSX} returns javascript syntax extension
  */
-const mapStateToProps = ({ userData }) => {
+export const mapStateToProps = ({ userData }) => {
   const { isLoggedIn, isAdmin } = userData;
   return {
     isLoggedIn,

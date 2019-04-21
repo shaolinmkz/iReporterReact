@@ -10,9 +10,11 @@ import HelperUtils from "../../utils/helperUtils";
  */
 export const initialState = localStorage => ({
   user: localStorage.getItem("user") || "",
-  isAdmin: HelperUtils.verifyToken(localStorage.getItem("token")).isAdmin,
+  isAdmin: Boolean(
+    HelperUtils.verifyToken(localStorage.getItem("token")).isAdmin
+  ),
   token: localStorage.getItem("token") || "",
-  isLoggedIn: !!HelperUtils.verifyToken(localStorage.getItem("token"))
+  isLoggedIn: Boolean(HelperUtils.verifyToken(localStorage.getItem("token")))
 });
 
 /**
@@ -29,6 +31,7 @@ const userReducer = (state = initialState(localStorage), { payload, type }) => {
       ...state,
       user: payload.user,
       token: payload.token,
+      isAdmin: payload.user.isAdmin,
       isLoggedIn: true
     };
   case LOGOUT_USER:
@@ -38,6 +41,7 @@ const userReducer = (state = initialState(localStorage), { payload, type }) => {
       ...state,
       user: "",
       token: "",
+      isAdmin: false,
       isLoggedIn: false
     };
   default:

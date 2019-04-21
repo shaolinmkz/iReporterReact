@@ -21,7 +21,7 @@ dotenv.config();
  * @description stateful component that handles the Report page
  * @return {undefined}
  */
-class Report extends Component {
+export class Report extends Component {
   /**
    * @description constructor method for the report page
    * @param {object} props
@@ -399,7 +399,7 @@ class Report extends Component {
  * @param {object} dispatch
  * @return {JSX} returns javascript syntax extension
  */
-const mapDispatchToProps = dispatch =>
+export const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       createRedflag: redflagCreatenAction,
@@ -415,7 +415,7 @@ const mapDispatchToProps = dispatch =>
  * @param {object} dispatch
  * @return {JSX} returns javascript syntax extension
  */
-const mapStateToProps = ({ userData, recordData }) => {
+export const mapStateToProps = ({ userData, recordData }) => {
   const { isLoggedIn } = userData;
   const { lng, lat, generalLoading } = recordData;
   return {

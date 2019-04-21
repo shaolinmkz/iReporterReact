@@ -3,9 +3,12 @@ import { post } from "axios";
 import { toast, ToastType } from "react-toastify";
 import notifyUser from "../../components/Toast.jsx";
 import { loginURL, signupURL } from "./endPoints";
-import { AUTH_USER, AUTH_LOADING, STOP_LOADING, LOGOUT_USER } from "../actionTypes";
-
-
+import {
+  AUTH_USER,
+  AUTH_LOADING,
+  STOP_LOADING,
+  LOGOUT_USER
+} from "../actionTypes";
 
 /**
  * @description function for creating an action for loading
@@ -20,13 +23,11 @@ export const authLoading = () => ({ type: AUTH_LOADING });
  */
 export const logoutUserAction = () => ({ type: LOGOUT_USER });
 
-
 /**
  * @description function for craeting a stopping action the loading action
  * @returns {object} action
  */
 export const stopLoading = () => ({ type: STOP_LOADING });
-
 
 /**
  * @description function for storing platform data in localStorage
@@ -38,7 +39,7 @@ export const stopLoading = () => ({ type: STOP_LOADING });
 export const storeInLocal = (token, user, localStorage) => {
   localStorage.token = token;
   localStorage.user = JSON.stringify(user);
-  localStorage.isLoggedIn = true
+  localStorage.isLoggedIn = true;
 };
 
 /**

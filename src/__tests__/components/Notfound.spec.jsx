@@ -1,9 +1,7 @@
 import React from "react";
-import { configure, shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import NotFound from "../components/commonViews/404/404.jsx";
+import { shallow } from "enzyme";
+import NotFound from "../../components/commonViews/404/404.jsx";
 
-configure({ adapter: new Adapter() });
 
 describe("NotFound component should be rendered", () => {
   const NotFoundComp = shallow(<NotFound />);

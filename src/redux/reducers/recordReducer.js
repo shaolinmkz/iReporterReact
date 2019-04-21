@@ -14,7 +14,8 @@ import {
 export const initialState = {
   generalLoading: false,
   lat: 6.465422,
-  lng: 3.406448
+  lng: 3.406448,
+  RecordId: ''
 };
 
 /**
@@ -49,7 +50,7 @@ const recordReducer = (state = initialState, { payload, type }) => {
   case CREATE_NEW_RECORD:
     return {
       ...state,
-      newRecordId: payload.id,
+      RecordId: payload.id,
       generalLoading: false
     };
   default:

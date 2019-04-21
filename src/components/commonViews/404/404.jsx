@@ -5,7 +5,7 @@ import React from "react";
  * @returns {JSX} JSX
  */
 const NotFound = () => {
-  document.title = "Page Not Found"; 
+  document.title = "Page Not Found";
   return (
     <div style={{ textAlign: "center", marginTop: "5%" }}>
       <img
@@ -27,8 +27,7 @@ const NotFound = () => {
           textAlign: "center",
           fontSize: "1.5em",
           color: "#162661",
-          padding: "0.5em 0",
-          marginBottom: "20%"
+          padding: "0.5em 0"
         }}>
         PAGE NOT FOUND
       </h1>

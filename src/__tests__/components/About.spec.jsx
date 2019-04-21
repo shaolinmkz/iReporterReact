@@ -1,9 +1,6 @@
 import React from "react";
-import { configure, shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import About from "../components/commonViews/About/About.jsx";
-
-configure({ adapter: new Adapter() });
+import { shallow } from "enzyme";
+import About from "../../components/commonViews/About/About.jsx";
 
 describe("About component should be rendered", () => {
   const AboutComp = shallow(<About />);

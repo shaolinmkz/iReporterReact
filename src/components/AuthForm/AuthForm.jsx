@@ -14,7 +14,7 @@ import {
  * @description stateful class based component that handles authentication
  * @return {undefined}
  */
-class AuthForm extends Component {
+export class AuthForm extends Component {
   /**
    * @description method that manages component state
    * @param {object} props - component properties
@@ -92,6 +92,26 @@ class AuthForm extends Component {
   };
 
   /**
+   * @description handles auth form switching
+   * @param {object} e
+   * @return {undefined}
+   */
+  switchFormBelowSignup = e => {
+    this.setState({ form: "signup" });
+    e.target.parentNode.reset();
+  };
+
+  /**
+   * @description handles auth form switching
+   * @param {object} e
+   * @return {undefined}
+   */
+  switchFormBelowLogin= e => {
+    this.setState({ form: "login" });
+    e.target.parentNode.reset();
+  };
+
+  /**
    * @description handles login form submit
    * @param {object} e
    * @return {undefined}
@@ -124,11 +144,7 @@ class AuthForm extends Component {
   loginComp() {
     const { loading } = this.props;
     return (
-      <form
-        className="signin-form clearfix"
-        onSubmit={e => {
-          this.handleLoginSubmit(e);
-        }}>
+      <form className="signin-form clearfix" onSubmit={this.handleLoginSubmit}>
         <h2>
           <span
             className="switch-signup"
@@ -164,7 +180,7 @@ class AuthForm extends Component {
           required
         />
         <span>
-          <input type="submit" value="Login" />
+          {!loading && <input id="loginSubmit" type="submit" value="Login" />}
         </span>
         {loading && (
           <img
@@ -180,10 +196,7 @@ class AuthForm extends Component {
         <input
           type="button"
           title="new user sign-up"
-          onClick={e => {
-            this.setState({ form: "signup" });
-            e.target.parentNode.reset();
-          }}
+          onClick={this.switchFormBelowSignup}
           className="switch-signup theme-orange deactivate"
           value="Create an account here"
         />
@@ -277,7 +290,7 @@ class AuthForm extends Component {
           onChange={this.handleSignupChange}
           required
         />
-        <input type="submit" value="CREATE ACCOUNT" />
+        {!loading && <input type="submit" value="CREATE ACCOUNT" />}
         {loading && (
           <img
             src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
@@ -292,10 +305,7 @@ class AuthForm extends Component {
         <input
           type="button"
           title="existing user signin"
-          onClick={e => {
-            this.setState({ form: "login" });
-            e.target.parentNode.reset();
-          }}
+          onClick={this.switchFormBelowLogin}
           className="switch-signin deactivate"
           value="Sign in here"
         />
@@ -310,7 +320,7 @@ class AuthForm extends Component {
   render() {
     const { isLoggedIn } = this.props;
     if (isLoggedIn) {
-      return <Redirect to="/home" />
+      return <Redirect to="/home" />;
     }
     return <Fragment>{this.renderForm()}</Fragment>;
   }
