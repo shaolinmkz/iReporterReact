@@ -157,7 +157,7 @@ export class Report extends Component {
     const { dispatchGeneralLoading, stopGeneralLoading } = this.props;
     dispatchGeneralLoading();
 
-    const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_UPLOAD_URL;
+    const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_IMAGE_UPLOAD_URL;
 
     try {
       const getImage = await post(CLOUDINARY_UPLOAD_URL, imageFormData, {
@@ -182,7 +182,7 @@ export class Report extends Component {
     const { dispatchGeneralLoading, stopGeneralLoading } = this.props;
     dispatchGeneralLoading();
 
-    const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_UPLOAD_URL;
+    const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_VIDEO_UPLOAD_URL;
 
     try {
       const getVideo = await post(CLOUDINARY_UPLOAD_URL, videoFormData, {

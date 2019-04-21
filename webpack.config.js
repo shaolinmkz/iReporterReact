@@ -71,7 +71,8 @@ module.exports = env => ({
     new webpack.DefinePlugin({
       "process.env.SECRET_KEY": JSON.stringify(process.env.SECRET_KEY),
       "process.env.GOOGLE_API_KEY": JSON.stringify(process.env.GOOGLE_API_KEY),
-      "process.env.CLOUDINARY_UPLOAD_URL": JSON.stringify(process.env.CLOUDINARY_UPLOAD_URL),
+      "process.env.CLOUDINARY_IMAGE_UPLOAD_URL": JSON.stringify(process.env.CLOUDINARY_IMAGE_UPLOAD_URL),
+      "process.env.CLOUDINARY_VIDEO_UPLOAD_URL": JSON.stringify(process.env.CLOUDINARY_VIDEO_UPLOAD_URL),
       "process.env.CLOUDINARY_UPLOAD_PRESET": JSON.stringify(process.env.CLOUDINARY_UPLOAD_PRESET)
     })
   ],
