@@ -10,7 +10,7 @@ module.exports = env => ({
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
-    publicPath: "./"
+    publicPath: "/"
   },
   resolve: {
     extensions: [".js", ".jsx", ".json", ".css"]
@@ -41,21 +41,17 @@ module.exports = env => ({
       },
       {
         test: /\.(css|scss)$/,
-        use: [
-          "style-loader",
-          MiniCSSExtractPlugin.loader,
-          "css-loader"
-        ]
+        use: ["style-loader", MiniCSSExtractPlugin.loader, "css-loader"]
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
-            loader: 'url-loader',
+            loader: "url-loader",
             options: {
               limit: 10000,
-              name: '[name].[ext]',
-              outputPath: './assets/img/'
+              name: "[name].[ext]",
+              outputPath: "./assets/img/"
             }
           }
         ]
@@ -73,7 +69,10 @@ module.exports = env => ({
     }),
     new Dotenv(),
     new webpack.DefinePlugin({
-      "process.env.SECRET_KEY": JSON.stringify(process.env.SECRET_KEY)
+      "process.env.SECRET_KEY": JSON.stringify(process.env.SECRET_KEY),
+      "process.env.GOOGLE_API_KEY": JSON.stringify(process.env.GOOGLE_API_KEY),
+      "process.env.CLOUDINARY_UPLOAD_URL": JSON.stringify(process.env.CLOUDINARY_UPLOAD_URL),
+      "process.env.CLOUDINARY_UPLOAD_PRESET": JSON.stringify(process.env.CLOUDINARY_UPLOAD_PRESET)
     })
   ],
   devServer: {

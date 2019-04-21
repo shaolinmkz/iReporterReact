@@ -15,6 +15,7 @@ footer, header, hgroup, menu, nav, output, section, summary, audio, video {
 body{
     background-color: rgb(255, 255, 255);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding-top: 60px;
 }
 
 /* setup pre */
@@ -49,7 +50,6 @@ body{
   display: inline-table;
   position: absolute;
   top: -20px;
-  display:none;
 }
 #updateLocationLoader,
 #updateCommentLoader,
@@ -106,7 +106,6 @@ body{
 }
 #loading,
 #loading2,
-#latlongdisplay,
 .vid-uploads,
 #uploadProfileImage{
   display: none;
@@ -210,7 +209,7 @@ text-decoration: underline;
   box-shadow: none;
 }
 a:hover{
-  text-decoration: underline;
+  text-decoration: none;
 }
 #open-hamburger,
 #close-hamburger{
@@ -236,6 +235,10 @@ a:hover{
 header{
   background: rgb(255, 255, 255);
   border-bottom: 5px solid #162661;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 2000;
 }
 #mobile-nav{
   display: none;
@@ -1084,7 +1087,6 @@ input.location-input{
 #about div{
   box-shadow: 1px 5px 10px 1px grey;
   padding: 50px 50px;
-  margin: 0 0 25% 0
 }
 #howitworks div h1.theme-blue,
 #about div h1.theme-blue{
@@ -1097,6 +1099,10 @@ footer{
   text-align: center;
   padding-top: 0.9em;
   padding-bottom: 0.9em;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 2000;
 }
 
 /*--------------MEDIA QUERIES--------------*/

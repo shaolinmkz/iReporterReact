@@ -1,4 +1,21 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { toast, ToastType } from "react-toastify";
+import { bool, number, func } from "prop-types";
+import { connect } from "react-redux";
+import { post } from "axios";
+import { bindActionCreators } from "redux";
+import dotenv from 'dotenv';
+import notifyUser from "../../Toast.jsx";
+import GoogleSuggest from "../../GoogleMapPlaces.jsx";
+import {
+  redflagCreatenAction,
+  interventionCreateAction,
+  generalLoadingAction,
+  stopGeneralLoadingAction
+} from "../../../redux/actionCreators/createRecordAction";
+
+dotenv.config();
 
 /**
  * @description stateful component that handles the Report page
@@ -23,8 +40,14 @@ class Report extends Component {
       style: "block"
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleNew = this.handleNew.bind(this);
+    this.handleLineBreaks = this.handleLineBreaks.bind(this);
   }
+
+  componentWillReceiveProps = () => {
+    const { lng, lat } = this.props;
+
+    this.setState({ lng, lat });
+  };
 
   /**
    * @description handles form field change
@@ -32,12 +55,34 @@ class Report extends Component {
    * @return {undefined}
    */
   handleChange(e) {
-    if (e.target.name === "images" || e.target.name === "videos") {
+    if (e.target.name === "images") {
       this.setState({
-        [e.target.name]: [...this.state[e.target.name], e.target.value]
+        imagePreview: [...e.target.files].map(img => URL.createObjectURL(img)),
+        [e.target.name]: [...e.target.files]
       });
+
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET);
+      this.setState({ imageFormData: formData });
+
       return;
     }
+
+    if (e.target.name === "videos") {
+      this.setState({
+        [e.target.name]: [...e.target.files]
+      });
+
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET);
+      this.setState({ videoFormData: formData });
+      return;
+    }
+
     this.setState({
       ...this.state,
       [e.target.name]: e.target.value
@@ -45,29 +90,124 @@ class Report extends Component {
   }
 
   /**
-   * @description handles form part render
+   * @description handles forms line breaks
    * @param {object} n
    * @return {JSX} JSX
    */
-  handleNew(n=1) {
+  handleLineBreaks(n = 1) {
     const multi = [];
-    for (let i =0; i <= n; i += 1) {
-      multi.push(<br key={i}/>)
+    for (let i = 0; i <= n; i += 1) {
+      multi.push(<br key={i} />);
     }
-    return (
-      <React.Fragment>
-        {multi}
-      </React.Fragment>
-    );
+    return <React.Fragment>{multi}</React.Fragment>;
   }
+
+  /**
+   * @description handles form submission
+   * @param {object} e - event object
+   * @return {undefined}
+   */
+  handleSubmit = async e => {
+    e.preventDefault();
+    const { imageFormData, videoFormData } = this.state;
+
+    const { createRedflag, createIntervention,dispatchGeneralLoading } = this.props;
+    
+    dispatchGeneralLoading();
+
+    if (imageFormData) {
+      const secureImageUrl = await this.handleImageUpload(imageFormData);
+      this.setState({ images: [secureImageUrl] });
+    }
+    if (videoFormData) {
+      const secureVideoUrl = await this.handleVideoUpload(videoFormData);
+      this.setState({ videos: [secureVideoUrl] });
+    }
+
+    const {
+      title,
+      comment,
+      incidentType,
+      lng,
+      lat,
+      images,
+      videos
+    } = this.state;
+
+    const requestObject = {
+      title,
+      comment,
+      location: `${lat}, ${lng}`,
+      images,
+      videos
+    };
+
+    if (incidentType === "red-flag") {
+      createRedflag(requestObject);
+    } else if (incidentType === "intervention") {
+      createIntervention(requestObject);
+    }
+  };
+
+  /**
+   * @param {object} imageFormData
+   * @returns {undefined}
+   */
+  handleImageUpload = async imageFormData => {
+    const { dispatchGeneralLoading, stopGeneralLoading } = this.props;
+    dispatchGeneralLoading();
+
+    const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_UPLOAD_URL;
+
+    try {
+      const getImage = await post(CLOUDINARY_UPLOAD_URL, imageFormData, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      });
+      const { data } = getImage;
+      const secureUrl = data.secure_url;
+      return secureUrl;
+    } catch (err) {
+      toast(notifyUser("COULD NOT UPLOAD IMAGE"), { type: ToastType.ERROR });
+      stopGeneralLoading();
+    }
+  };
+
+  /**
+   * @param {object} videoFormData
+   * @returns {undefined}
+   */
+  handleVideoUpload = async videoFormData => {
+    const { dispatchGeneralLoading, stopGeneralLoading } = this.props;
+    dispatchGeneralLoading();
+
+    const CLOUDINARY_UPLOAD_URL = process.env.CLOUDINARY_UPLOAD_URL;
+
+    try {
+      const getVideo = await post(CLOUDINARY_UPLOAD_URL, videoFormData, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest"
+        }
+      });
+      const { data } = getVideo;
+      const secureUrl = data.secure_url;
+      return secureUrl;
+    } catch (err) {
+      toast(notifyUser("COULD NOT UPLOAD VIDEO"), { type: ToastType.ERROR });
+      stopGeneralLoading();
+    }
+  };
 
   /**
    * @description handles form part render
    * @return {JSX} JSX
    */
   handleFormRender() {
+    const {imagePreview } = this.state;
+    const { generalLoading } = this.props;
     return (
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <section id="boundary">
           <h2 id="compose-heading">COMPOSE REPORT</h2>
           <h1 className="font-setting">TITLE</h1>
@@ -81,7 +221,7 @@ class Report extends Component {
             name="title"
             required
           />
-          {this.handleNew(3)}
+          {this.handleLineBreaks(3)}
           <h1 className=" font-setting">COMMENT</h1>
           <textarea
             required
@@ -127,7 +267,7 @@ class Report extends Component {
               title="Intervention"
             />
           </label>
-          {this.handleNew()}
+          {this.handleLineBreaks()}
           <h1 className=" font-setting">GEOLOCATION</h1>
           <br />
           <img
@@ -138,36 +278,15 @@ class Report extends Component {
             style={{ width: "50px" }}
           />
           <br />
-          <input
-            type="text"
-            id="incident_address"
-            placeholder="ENTER INCIDENT ADDRESS"
-            name="address"
-            onChange={this.handleChange}
-          />
-          {this.handleNew()}
-          <div id="latlongdisplay">
-            <div id="map" />
-            <label>Latitude : </label>{" "}
-            <span id="latitude" className="latlngfont green" />
-            {this.handleNew(2)}
-            <label>Longitude : </label>{" "}
-            <span id="longitude" className="latlngfont green" />
-          </div>
-          {this.handleNew(2)}
-          <small className="theme-orange">
-            If your in the current location, then click the{" "}
-            <strong>FINDME</strong> button below
-          </small>
-          {this.handleNew(2)}
-          <input type="button" value="FIND ME" id="myCurrentLocation" />{" "}
+          <GoogleSuggest />
+          {this.handleLineBreaks()}
           <img
             src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
             id="loading"
             title="loading please wait"
             style={{ width: "50px", marginBottom: "-1.2em" }}
           />
-          {this.handleNew(2)}
+          {this.handleLineBreaks(2)}
           <div id="responseMessage" />
           <br />
           <h1 className=" font-setting">FILE UPLOADS</h1>
@@ -176,7 +295,7 @@ class Report extends Component {
             <strong>Picture</strong> and <strong>Video</strong> evidence(s) are
             not compulsory, but having them will help improve your report
           </small>
-          {this.handleNew(2)}
+          {this.handleLineBreaks(2)}
           <label>Upload Picture Evidence</label>{" "}
           <span className="separateIncidentType"> &nbsp; </span>
           <input
@@ -186,14 +305,27 @@ class Report extends Component {
             name="images"
             onChange={this.handleChange}
           />
-          <span style={{ position: "relative" }}>
-            <img
-              src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
-              className="uploadLoader"
-            />
-          </span>
-          <ul id="place-images" />
-          {this.handleNew(2)}
+          {imagePreview && (
+            <div
+              style={{
+                display: "block",
+                marginTop: "2em"
+              }}>
+              {imagePreview.map((img, index) => (
+                <img
+                  src={img}
+                  alt="image preview"
+                  key={index}
+                  style={{
+                    display: "inline-block",
+                    width: "10%",
+                    marginLeft: "2em"
+                  }}
+                />
+              ))}
+            </div>
+          )}
+          {this.handleLineBreaks(2)}
           <label>Upload Videos Evidence</label>{" "}
           <span className="separateIncidentType"> &nbsp; </span>
           <input
@@ -203,28 +335,31 @@ class Report extends Component {
             name="videos"
             onChange={this.handleChange}
           />
-          <span style={{ position: "relative" }}>
-            <img
-              src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
-              className="uploadLoader"
-            />
-          </span>
-          <ul id="place-videos" />
           <br />
-          <input
-            type="submit"
-            value="SEND"
-            className="report"
-            title="submit report"
-            id="send-Incident"
-          />
-          <span style={{ position: "relative" }}>
-            <img
-              src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
-              className="uploadLoader"
+          {!generalLoading && (
+            <input
+              type="submit"
+              value="SUBMIT"
+              className="report"
+              title="submit report"
+              id="send-Incident"
             />
-          </span>
-          {this.handleNew(3)}
+          )}
+          {generalLoading && (
+            <span style={{ position: "relative" }}>
+              <img
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  textAlign: "center",
+                  marginTop: "3em"
+                }}
+                src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
+                className="uploadLoader"
+              />
+            </span>
+          )}
+          {this.handleLineBreaks(3)}
         </section>
       </form>
     );
@@ -236,6 +371,10 @@ class Report extends Component {
    */
   render() {
     document.title = "Report";
+    const { isLoggedIn } = this.props;
+    if (!isLoggedIn) {
+      return <Redirect to="/" />;
+    }
     return (
       <React.Fragment>
         <section
@@ -243,11 +382,6 @@ class Report extends Component {
           onLoad={() => this.setState({ style: "none" })}>
           {this.handleFormRender()}
         </section>
-
-        <section className="feeds">
-          <section className="post-display" />
-        </section>
-
         <section className="crime-report-container">
           <img
             src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550839779/crime_report.png"
@@ -255,19 +389,55 @@ class Report extends Component {
           />
           <h1>SEE SOMETHING SAY SOMETHING...</h1>
         </section>
-
-        <section
-          id="outer-modal"
-          className="outer-modal-loader"
-          style={{ display: this.state.style }}>
-          <div className="inner-box-loader">
-            <img src="https://res.cloudinary.com/shaolinmkz/image/upload/v1546244139/mfwse2iecjdgk7m4sdeb.gif" />
-            <h1>PLEASE WAIT</h1>
-          </div>
-        </section>
       </React.Fragment>
     );
   }
 }
 
-export default Report;
+/**
+ * @description map dispatch to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      createRedflag: redflagCreatenAction,
+      createIntervention: interventionCreateAction,
+      dispatchGeneralLoading: generalLoadingAction,
+      stopGeneralLoading: stopGeneralLoadingAction
+    },
+    dispatch
+  );
+
+/**
+ * @description Map state to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+const mapStateToProps = ({ userData, recordData }) => {
+  const { isLoggedIn } = userData;
+  const { lng, lat, generalLoading } = recordData;
+  return {
+    isLoggedIn,
+    lng,
+    lat,
+    generalLoading
+  };
+};
+
+Report.propTypes = {
+  isLoggedIn: bool.isRequired,
+  lat: number,
+  lng: number,
+  generalLoading: bool,
+  createRedflag: func,
+  createIntervention: func,
+  dispatchGeneralLoading: func,
+  stopGeneralLoading: func
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Report);

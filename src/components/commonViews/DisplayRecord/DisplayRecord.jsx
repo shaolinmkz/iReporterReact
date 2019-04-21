@@ -1,5 +1,9 @@
 import React from "react";
 
+/**
+ * @description function for displaying a single record
+ * @returns {object} action
+ */
 const DisplayRecord = () => {
   return (
     <div>

@@ -1,5 +1,4 @@
 import { AUTH_LOADING, STOP_LOADING, AUTH_USER } from "../actionTypes";
-import { stopLoading } from "../actionCreators/authActions";
 
 /**
  * @description function to return initial state
@@ -26,7 +25,10 @@ const authReducer = (state = initialState, { type }) => {
       loading: false
     };
   case AUTH_USER:
-    return stopLoading();
+    return {
+      ...state,
+      loading: false
+    }
   default:
     return state;
   }

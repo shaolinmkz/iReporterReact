@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { func, bool } from "prop-types";
 // import { Redirect } from 'react-router-dom';
@@ -307,6 +308,10 @@ class AuthForm extends Component {
    * @return {JSX} returns javascript syntax extension
    */
   render() {
+    const { isLoggedIn } = this.props;
+    if (isLoggedIn) {
+      return <Redirect to="/home" />
+    }
     return <Fragment>{this.renderForm()}</Fragment>;
   }
 }
@@ -344,7 +349,8 @@ AuthForm.propTypes = {
   authLoginUser: func.isRequired,
   authSignupUser: func.isRequired,
   authLoader: func.isRequired,
-  loading: bool.isRequired
+  loading: bool.isRequired,
+  isLoggedIn: bool.isRequired
 };
 
 export default connect(
