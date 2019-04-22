@@ -1,5 +1,6 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
+import moxios from "moxios";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../../redux/store";
@@ -99,5 +100,27 @@ describe("Test the Report component with shallow", () => {
     expect(wrapper2.find("section.crime-report-container").exists()).toBe(
       false
     );
+  });
+  it("It should test the report methods", () => {
+    const shallowWrapper = shallow(
+      <Report
+        isLoggedIn
+        lng={1.34324}
+        lat={13.1344}
+        isAdmin
+        createRedflag={jest.fn()}
+        createIntervention={jest.fn()}
+        dispatchGeneralLoading={jest.fn()}
+        stopGeneralLoading={jest.fn()}
+        generalLoading
+      />
+    );
+    shallowWrapper.setProps({
+      generalLoading: false,
+      imagePreview: ["adasds", "fdszds"]
+    });
+    shallowWrapper.find("#send-Incident").simulate("submit");
+    shallowWrapper.find(".crime-form-container.clearfix").simulate("load");
+    shallowWrapper.instance().handleSubmit();
   });
 });

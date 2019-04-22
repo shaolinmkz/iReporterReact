@@ -40,7 +40,7 @@ describe("Test the Report component with mount", () => {
           reset: mockFunc
         }
       }
-    }
+    };
     authForm.handleLoginChange(e);
     authForm.handleSignupChange(e);
     authForm.switchFormBelowSignup(e);

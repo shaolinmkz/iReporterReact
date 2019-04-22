@@ -204,7 +204,7 @@ export class Report extends Component {
    * @return {JSX} JSX
    */
   handleFormRender() {
-    const {imagePreview } = this.state;
+    const { imagePreview } = this.state;
     const { generalLoading } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>

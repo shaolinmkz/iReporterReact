@@ -5,33 +5,40 @@ import React, { Component } from "react";
  * @return {undefined}
  */
 class Profile extends Component {
-/**
- * @description method that describes the state and method usage of the class
- * @param {object} props - component property
- * @returns {undefined}
- */
+  /**
+   * @description method that describes the state and method usage of the class
+   * @param {object} props - component property
+   * @returns {undefined}
+   */
   constructor(props) {
     super(props);
     this.state = {
-      firstname: "Chukwuemeka",
-      lastname: "Nwabuzor",
-      image:
-        "https://res.cloudinary.com/shaolinmkz/image/upload/v1553840626/ynkw4qvugqyfjoklt" +
-        "yrx.jpg",
-      username: "shaolinmkz",
-      email: "nwabuzor.obiora@gmail.com",
-      phoneNumber: "07067443245"
+      firstname: "",
+      lastname: "",
+      image: "",
+      username: "",
+      email: "",
+      phoneNumber: ""
     };
-    this.loadProfileDetails = this.loadProfileDetails.bind(this);
-    this.loadInterventionCount = this.loadInterventionCount.bind(this);
-    this.loadRedflagCount = this.loadRedflagCount.bind(this);
   }
 
+  componentDidMount = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    this.setState({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      image: user.profileImage,
+      username: user.username,
+      email: user.email,
+      phoneNumber: user.phoneNumber
+    });
+  };
   /**
    * @description loads the profile details
    * @return {JSX} returns JSX
    */
-  loadProfileDetails() {
+  loadProfileDetails = () => {
     return (
       <div className="profile-details-border">
         <img
@@ -70,7 +77,7 @@ class Profile extends Component {
    * @description loads the intervention count details
    * @return {JSX} returns JSX
    */
-  loadInterventionCount() {
+  loadInterventionCount = () => {
     return (
       <React.Fragment>
         <h1>INTERVENTION STATUS</h1>
@@ -110,7 +117,7 @@ class Profile extends Component {
    * @description loads RedFlag count details
    * @return {JSX} returns JSX
    */
-  loadRedflagCount() {
+  loadRedflagCount = () => {
     return (
       <React.Fragment>
         <h1>RED FLAG STATUS</h1>
@@ -151,7 +158,7 @@ class Profile extends Component {
    * @return {JSX} returns JSX
    */
   render() {
-    document.title = 'Profile';
+    document.title = "Profile";
     return (
       <React.Fragment>
         <section className="profile" id="profile">

@@ -71,6 +71,7 @@ class GoogleSuggest extends Component {
 
   render = () => {
     const { search, value } = this.state;
+    const { style } = this.props;
 
     return (
       <ReactGoogleMapLoader
@@ -88,6 +89,7 @@ class GoogleSuggest extends Component {
                 <input
                   type="text"
                   id="incident_address"
+                  style={style}
                   placeholder="ENTER INCIDENT ADDRESS"
                   value={value}
                   name="address"
@@ -129,8 +131,14 @@ const mapStateToProps = ({ recordData }) => {
 };
 
 GoogleSuggest.propTypes = {
-  dispatchGeolocation: func.isRequired
+  dispatchGeolocation: func.isRequired,
+  style: object
 };
+
+GoogleSuggest.defaultProps = {
+  style: {}
+};
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
