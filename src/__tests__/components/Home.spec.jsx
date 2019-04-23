@@ -95,6 +95,16 @@ describe("Get Incident record", () => {
     );
     await home.instance().handleRedflagSwitch();
   });
+});
+
+describe("Get Incident record", () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
 
   it("should get redflag record", async () => {
 
@@ -120,7 +130,19 @@ describe("Get Incident record", () => {
     );
     await home.instance().handleInterventionSwitch();
   });
+});
 
+
+describe("Get Incident record", () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  
   it("should get incident record when component mounts", async () => {
 
     const expectedResponse = {
@@ -144,6 +166,42 @@ describe("Get Incident record", () => {
       />
     );
     await home.instance().componentWillMount();
+  });
+});
+
+
+describe("Get Incident record", () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it("should get regflag record as default", async () => {
+
+    const expectedResponse = {
+      data: [
+        {
+          mockData: "mock data"
+        }
+      ]
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const home = shallow(
+      <Home
+        isLoggedIn
+        modalDisplay={"block"}
+        triggerModalClose={jest.fn()}
+        triggerModalOpen={jest.fn()}
+      />
+    );
+    await home.instance().handleRedflagSwitch();
   });
 
   it("should handle the change method", async () => {
