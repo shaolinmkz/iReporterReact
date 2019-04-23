@@ -13,24 +13,34 @@ class Admin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstname: "Chukwuemeka",
-      lastname: "Nwabuzor",
+      firstname: "",
+      lastname: "",
       image:
-        "https://res.cloudinary.com/shaolinmkz/image/upload/v1553840626/ynkw4qvugqyfjoklt" +
-        "yrx.jpg",
-      username: "shaolinmkz",
-      email: "nwabuzor.obiora@gmail.com",
-      phoneNumber: "07067443245"
+        "",
+      username: "",
+      email: "",
+      phoneNumber: ""
     };
-    this.loadProfileDetails = this.loadProfileDetails.bind(this);
-    this.loadRecords = this.loadRecords.bind(this);
   }
+
+  componentDidMount = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    this.setState({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      image: user.profileImage,
+      username: user.username,
+      email: user.email,
+      phoneNumber: user.phoneNumber
+    });
+  };
 
   /**
    * @description method that renders the profile detalis
    * @returns {JSX} JSX
    */
-  loadProfileDetails() {
+  loadProfileDetails = () => {
     return (
       <div className="profile-details-border">
         <img
@@ -70,7 +80,7 @@ class Admin extends Component {
    * @description method that renders user records display
    * @returns {JSX} JSX
    */
-  loadRecords() {
+  loadRecords = () => {
     return (
       <div className="admin-container clearfix">
         <section className="admin-nav clearfix">
