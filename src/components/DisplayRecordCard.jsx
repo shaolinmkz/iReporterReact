@@ -73,11 +73,11 @@ const DisplayRecordCard = ({
       <div className="delete-record-container">
         <button
           className="blue edit"
-          onMouseEnter={e => {
-            localStorage.setItem("recordId", e.target.parentNode.parentNode.id);
+          onMouseEnter={() => {
+            localStorage.setItem("recordId", id);
             localStorage.setItem(
               "comment",
-              e.target.parentNode.parentNode.children[5].children[0].innerHTML
+              comment
             );
           }}
           onMouseDown={onMouseDown}>

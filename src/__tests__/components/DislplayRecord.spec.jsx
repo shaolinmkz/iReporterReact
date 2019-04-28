@@ -8,6 +8,45 @@ import store from "../../redux/store";
 import DisplayPage, {
   DisplayRecord
 } from "../../components/commonViews/DisplayRecord/DisplayRecord.jsx";
+import HelperUtils from "../../utils/helperUtils";
+
+const sampleUser = {
+  email: "sampleuser.sampleuser@gmail.com",
+  firstname: "sampleuser",
+  id: 1,
+  isAdmin: true,
+  lastname: "sampleuser",
+  phoneNumber: "09076336554",
+  profileImage:
+    "https://res.cloudinary.com/sampleuser/image/upload/v1553840626/sampleuser.jpg",
+  username: "sampleuser101"
+};
+
+const mockRecord = {
+  comment:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
+  createdby: 11,
+  createdon: "2011-01-03T00:35:00.544Z",
+  email: "mock-email",
+  firstname: "mock-firstname",
+  id: 2,
+  images: [
+    "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
+    "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
+  ],
+  isadmin: false,
+  lastname: "mock-lastname",
+  location: "6.492631700, 3.348967100",
+  othername: "mock-othername",
+  phonenumber: "12345678901",
+  profileimage:
+    "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
+  status: "resolved",
+  title: "Stolen Passwords",
+  type: "red-flag",
+  username: "mock-username",
+  videos: []
+};
 
 const matchObj = {
   params: {
@@ -22,10 +61,13 @@ describe("displayPage component", () => {
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
-        token="mock_token"
+        token={HelperUtils.generateToken(sampleUser)}
         match={matchObj}
       />
     );
+    displayPage.setState({
+      record: mockRecord
+    });
     const e = {
       target: {
         className: "outer-modal"
@@ -50,15 +92,18 @@ describe("displayPage component", () => {
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
-        token="mock_token"
+        token={HelperUtils.generateToken(sampleUser)}
         match={matchObj}
       />
     );
+    displayPage.setState({
+      record: mockRecord
+    });
     expect(displayPage.find("section.home-feeds").exists()).toBe(false);
   });
 
   it("should mount render the displayPage component", () => {
-    mount(
+    const disp = mount(
       <Provider store={store}>
         <Router>
           <DisplayPage
@@ -66,12 +111,15 @@ describe("displayPage component", () => {
             modalDisplay={"block"}
             triggerModalClose={jest.fn()}
             triggerModalOpen={jest.fn()}
-            token="mock_token"
+            token={HelperUtils.generateToken(sampleUser)}
             match={matchObj}
           />
         </Router>
       </Provider>
     );
+    disp.setState({
+      record: mockRecord
+    });
   });
 });
 
@@ -125,7 +173,7 @@ describe("Get Incident record", () => {
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
-        token="mock_token"
+        token={HelperUtils.generateToken(sampleUser)}
         match={matchObj}
       />
     );
@@ -173,11 +221,11 @@ describe("Get Incident record", () => {
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
-        token="mock_token"
+        token={HelperUtils.generateToken(sampleUser)}
         match={matchObj}
       />
     );
-    display.setState({ type: 'intervention' })
+    display.setState({ type: "intervention" });
     await display.instance().componentWillMount();
   });
 
@@ -197,7 +245,7 @@ describe("Get Incident record", () => {
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
-        token="mock_token"
+        token={HelperUtils.generateToken(sampleUser)}
         match={matchObj}
       />
     );
@@ -212,7 +260,7 @@ describe("Get Incident record", () => {
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
-        token="mock_token"
+        token={HelperUtils.generateToken(sampleUser)}
         match={matchObj}
       />
     );

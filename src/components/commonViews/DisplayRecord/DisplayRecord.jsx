@@ -13,6 +13,27 @@ import DisplayRecordCard from "../../DisplayRecordCard.jsx";
 import ModalComp from "../../Modal.jsx";
 import GoogleSuggest from "../../GoogleMapPlaces.jsx";
 
+const init = {
+  comment: "",
+  createdby: 11,
+  createdon: "",
+  email: "",
+  firstname: "",
+  id: 0,
+  images: [],
+  isadmin: false,
+  lastname: "",
+  location: "0, 0",
+  othername: "",
+  phonenumber: "",
+  profileimage: "",
+  status: "",
+  title: "",
+  type: "",
+  username: "",
+  videos: []
+};
+
 /**
  * @description class based method for displaying a single record
  * @param {object} e - event object
@@ -20,11 +41,9 @@ import GoogleSuggest from "../../GoogleMapPlaces.jsx";
  */
 export class DisplayRecord extends Component {
   state = {
-    record: {},
+    record: init,
     loading: true,
     type: "",
-    redFlagActive: "",
-    interventionActive: "",
     value: localStorage.getItem("comment") || ""
   };
 

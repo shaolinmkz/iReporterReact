@@ -5,7 +5,7 @@ import { bool, number, func } from "prop-types";
 import { connect } from "react-redux";
 import { post } from "axios";
 import { bindActionCreators } from "redux";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import notifyUser from "../../Toast.jsx";
 import GoogleSuggest from "../../GoogleMapPlaces.jsx";
 import {
@@ -42,12 +42,6 @@ export class Report extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleLineBreaks = this.handleLineBreaks.bind(this);
   }
-
-  componentWillReceiveProps = () => {
-    const { lng, lat } = this.props;
-
-    this.setState({ lng, lat });
-  };
 
   /**
    * @description handles form field change
@@ -111,8 +105,12 @@ export class Report extends Component {
     e.preventDefault();
     const { imageFormData, videoFormData } = this.state;
 
-    const { createRedflag, createIntervention,dispatchGeneralLoading } = this.props;
-    
+    const {
+      createRedflag,
+      createIntervention,
+      dispatchGeneralLoading
+    } = this.props;
+
     dispatchGeneralLoading();
 
     if (imageFormData) {
@@ -124,16 +122,8 @@ export class Report extends Component {
       this.setState({ videos: [secureVideoUrl] });
     }
 
-    const {
-      title,
-      comment,
-      incidentType,
-      lng,
-      lat,
-      images,
-      videos
-    } = this.state;
-
+    const { title, comment, incidentType, images, videos } = this.state;
+    const { lng, lat } = this.props;
     const requestObject = {
       title,
       comment,
