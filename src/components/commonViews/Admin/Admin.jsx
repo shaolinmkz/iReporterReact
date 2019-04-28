@@ -1,10 +1,15 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { bool, string } from "prop-types";
+// import { bindActionCreators } from "redux";
+// import { get } from "axios";
+import { connect } from "react-redux";
 
 /**
  * @description stateful class based component that the admin page
  * @return {undefined}
  */
-class Admin extends Component {
+export class Admin extends Component {
   /**
    * @description method that manages component state
    * @param {object} props - component properties
@@ -133,6 +138,12 @@ class Admin extends Component {
    */
   render() {
     document.title = "Admin";
+    const { isLoggedIn, isAdmin } =  this.props;
+    if (!isLoggedIn) {
+      return <Redirect to="/" />;
+    } else if (!isAdmin) {
+      return <Redirect to="/profile" />
+    }
     return (
       <React.Fragment>
         <section className="admin profile" id="admin">
@@ -177,4 +188,24 @@ class Admin extends Component {
   }
 }
 
-export default Admin;
+/**
+ * @description Map state to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+const mapStateToProps = ({ userData }) => {
+  const { isLoggedIn, token, isAdmin } = userData;
+  return {
+    isLoggedIn,
+    token,
+    isAdmin
+  };
+};
+
+Admin.propTypes = {
+  isLoggedIn: bool.isRequired,
+  isAdmin: bool.isRequired,
+  token: string.isRequired
+};
+
+export default connect(mapStateToProps)(Admin);

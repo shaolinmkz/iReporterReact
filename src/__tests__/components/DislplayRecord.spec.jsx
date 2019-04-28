@@ -4,10 +4,10 @@ import moxios from "moxios";
 import sinon from "sinon";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
-import ReduxPromise from "redux-promise";
-import { createStore, applyMiddleware, combineReducers } from "redux";
 import store from "../../redux/store";
-import HomePage, { Home } from "../../components/commonViews/Home/Home.jsx";
+import DisplayPage, {
+  DisplayRecord
+} from "../../components/commonViews/DisplayRecord/DisplayRecord.jsx";
 import HelperUtils from "../../utils/helperUtils";
 
 const sampleUser = {
@@ -23,7 +23,6 @@ const sampleUser = {
 };
 
 const mockRecord = {
-  map: jest.fn(),
   comment:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
   createdby: 11,
@@ -49,68 +48,26 @@ const mockRecord = {
   videos: []
 };
 
-/**
- * @description Mocks the user reducer
- * @returns {object} Returns the initial state.
- */
-const userReducer = () => ({
-  token: HelperUtils.generateToken(sampleUser),
-  isLoggedIn: true
-});
-
-/**
- * @description Mocks the modal reducer
- * @returns {object} Returns the initial state.
- */
-const modalReducer = () => ({
-  modalDisplay: "none"
-});
-
-/**
- * @description Mocks the modal reducer
- * @returns {object} Returns the initial state.
- */
-const recordReducer = () => ({
-  generalLoading: false,
-  lat: 6.465422,
-  lng: 3.406448
-});
-
-/**
- * @description Mocks the auth reducer
- * @returns {object} Returns the initial state.
- */
-const authReducer = () => ({
-  loading: false
-});
-
-// mock root reducer
-const rootReducer = combineReducers({
-  authData: authReducer,
-  userData: userReducer,
-  recordData: recordReducer,
-  modalData: modalReducer
-});
-
-createStore(rootReducer, applyMiddleware(ReduxPromise));
-
-
-describe("HomePage component", () => {
-  it("should shallow render the HomePage component", () => {
-    const homePage = shallow(
-      <Home
+const matchObj = {
+  params: {
+    id: 2
+  }
+};
+describe("displayPage component", () => {
+  it("should shallow render the displayPage component", () => {
+    const displayPage = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
       />
     );
-    homePage.setState({
-      redflagRecords: mockRecord,
-      interventionRecords: mockRecord
+    displayPage.setState({
+      record: mockRecord
     });
-    homePage.setProps({ token: HelperUtils.generateToken(sampleUser) });
     const e = {
       target: {
         className: "outer-modal"
@@ -122,44 +79,47 @@ describe("HomePage component", () => {
       }
     };
     sinon.stub(window, "scrollTo");
-    homePage.instance().scrollTop();
-    homePage.instance().closeModal(e);
-    homePage.instance().closeModal(e2);
-    expect(homePage.find("section.home-feeds").exists()).toBe(true);
+    displayPage.instance().scrollTop();
+    displayPage.instance().closeModal(e);
+    displayPage.instance().closeModal(e2);
+    expect(displayPage.find("section.home-feeds").exists()).toBe(true);
   });
 
-  it("should shallow render the HomePage component", () => {
-    const homePage = shallow(
-      <Home
+  it("should shallow render the displayPage component", () => {
+    const displayPage = shallow(
+      <DisplayRecord
         isLoggedIn={false}
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
       />
     );
-    expect(homePage.find("section.home-feeds").exists()).toBe(false);
+    displayPage.setState({
+      record: mockRecord
+    });
+    expect(displayPage.find("section.home-feeds").exists()).toBe(false);
   });
 
-  it("should mount render the HomePage component", () => {
-    const newHomeMount = mount(
+  it("should mount render the displayPage component", () => {
+    const disp = mount(
       <Provider store={store}>
         <Router>
-          <HomePage
+          <DisplayPage
             isLoggedIn
             modalDisplay={"block"}
             triggerModalClose={jest.fn()}
             triggerModalOpen={jest.fn()}
             token={HelperUtils.generateToken(sampleUser)}
+            match={matchObj}
           />
         </Router>
       </Provider>
     );
-    newHomeMount.setState({
-      redflagRecords: mockRecord,
-      interventionRecords: mockRecord
+    disp.setState({
+      record: mockRecord
     });
-    newHomeMount.setProps({ token: HelperUtils.generateToken(sampleUser) });
   });
 });
 
@@ -172,7 +132,7 @@ describe("Get Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should get regflag record as default", async () => {
+  it("should get a record", async () => {
     const expectedResponse = {
       data: [
         {
@@ -207,24 +167,20 @@ describe("Get Incident record", () => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
     });
-    const home = shallow(
-      <Home
+    const display = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
       />
     );
-    home.setState({
-      redflagRecords: mockRecord,
-      interventionRecords: mockRecord
-    });
-    home.setProps({ token: HelperUtils.generateToken(sampleUser) });
-    await home.instance().handleRedflagSwitch();
+    await display.instance().componentWillMount();
   });
 
-  it("shold get redflag record", async () => {
+  it("should get a record", async () => {
     const expectedResponse = {
       data: [
         {
@@ -248,7 +204,7 @@ describe("Get Incident record", () => {
             "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
           status: "resolved",
           title: "Stolen Passwords",
-          type: "red-flag",
+          type: "intervention",
           username: "mock-username",
           videos: []
         }
@@ -259,82 +215,53 @@ describe("Get Incident record", () => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
     });
-    const home = shallow(
-      <Home
+    const display = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
       />
     );
-    home.setState({
-      redflagRecords: mockRecord,
-      interventionRecords: mockRecord
-    });
-    await home.instance().handleInterventionSwitch();
+    display.setState({ type: "intervention" });
+    await display.instance().componentWillMount();
   });
 
   it("should get incident record when component mounts", async () => {
     const expectedResponse = {
-      data: [
-        {
-          comment:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
-          createdby: 11,
-          createdon: "2011-01-03T00:35:00.544Z",
-          email: "mock-email",
-          firstname: "mock-firstname",
-          id: 2,
-          images: [
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
-          ],
-          isadmin: false,
-          lastname: "mock-lastname",
-          location: "6.492631700, 3.348967100",
-          othername: "mock-othername",
-          phonenumber: "12345678901",
-          profileimage:
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
-          status: "resolved",
-          title: "Stolen Passwords",
-          type: "red-flag",
-          username: "mock-username",
-          videos: []
-        }
-      ]
+      status: 404,
+      message: "record not found"
     };
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
-      request.respondWith({ status: 200, response: expectedResponse });
+      request.respondWith({ status: 404, response: expectedResponse });
     });
-    const home = shallow(
-      <Home
+    const display = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
       />
     );
-    home.setState({
-      redflagRecords: mockRecord,
-      interventionRecords: mockRecord
-    });
-    home.setProps({ token: HelperUtils.generateToken(sampleUser) });
-    await home.instance().componentWillMount();
+    display.setState({ status: 404 });
+    await display.instance().componentWillMount();
   });
 
   it("should handle the change method", async () => {
-    const home = shallow(
-      <Home
+    const display = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
       />
     );
     const e = {
@@ -342,11 +269,6 @@ describe("Get Incident record", () => {
         value: "title"
       }
     };
-    home.setState({
-      redflagRecords: mockRecord,
-      interventionRecords: mockRecord
-    });
-    home.setProps({ token: HelperUtils.generateToken(sampleUser) });
-    home.instance().handleChange(e);
+    display.instance().handleChange(e);
   });
 });

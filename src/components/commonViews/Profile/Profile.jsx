@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { bool, string } from "prop-types";
+// import { bindActionCreators } from "redux";
+// import { get } from "axios";
+import { connect } from "react-redux";
 
 /**
  * @description class based component for the profile page
@@ -72,7 +77,7 @@ class Profile extends Component {
         </div>
       </div>
     );
-  }
+  };
   /**
    * @description loads the intervention count details
    * @return {JSX} returns JSX
@@ -111,7 +116,7 @@ class Profile extends Component {
         </div>
       </React.Fragment>
     );
-  }
+  };
 
   /**
    * @description loads RedFlag count details
@@ -151,7 +156,7 @@ class Profile extends Component {
         </div>
       </React.Fragment>
     );
-  }
+  };
 
   /**
    * @description renders the profile to the DOM
@@ -159,6 +164,10 @@ class Profile extends Component {
    */
   render() {
     document.title = "Profile";
+    const { isLoggedIn } =  this.props;
+    if (!isLoggedIn) {
+      return <Redirect to="/" />;
+    }
     return (
       <React.Fragment>
         <section className="profile" id="profile">
@@ -192,4 +201,36 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+// /**
+//  * @description map dispatch to props function
+//  * @param {object} dispatch
+//  * @return {JSX} returns javascript syntax extension
+//  */
+// export const mapDispatchToProps = dispatch =>
+//   bindActionCreators(
+//     {
+//       triggerModalClose: closeModalAction,
+//       triggerModalOpen: openModalAction
+//     },
+//     dispatch
+//   );
+
+/**
+ * @description Map state to props function
+ * @param {object} dispatch
+ * @return {JSX} returns javascript syntax extension
+ */
+const mapStateToProps = ({ userData }) => {
+  const { isLoggedIn, token } = userData;
+  return {
+    isLoggedIn,
+    token
+  };
+};
+
+Profile.propTypes = {
+  isLoggedIn: bool.isRequired,
+  token: string.isRequired
+};
+
+export default connect(mapStateToProps)(Profile);

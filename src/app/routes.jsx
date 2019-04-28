@@ -1,13 +1,13 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import About from "../components/commonViews/About/About.jsx";
-import Home from "../components/commonViews/Home/Home.jsx";
+import HomeView from "../components/commonViews/Home/Home.jsx";
 import LandingPage from "../components/commonViews/LandingPage/LandingPage.jsx";
 import HowItWorks from "../components/commonViews/HowItWorks/HowItWorks.jsx";
 import Profile from "../components/commonViews/Profile/Profile.jsx";
 import Admin from "../components/commonViews/Admin/Admin.jsx";
-import Report from "../components/commonViews/Report/Report.jsx";
-import DisplayRecord from "../components/commonViews/DisplayRecord/DisplayRecord.jsx";
+import ReportView from "../components/commonViews/Report/Report.jsx";
+import DisplayRecordView from "../components/commonViews/DisplayRecord/DisplayRecord.jsx";
 import NotFound from "../components/commonViews/404/404.jsx";
 
 const routeProps = [
@@ -21,7 +21,7 @@ const routeProps = [
   },
   {
     path: "/home",
-    component: Home
+    component: HomeView
   },
   {
     path: "/about",
@@ -41,11 +41,15 @@ const routeProps = [
   },
   {
     path: "/report",
-    component: Report
+    component: ReportView
   },
   {
-    path: "/displayrecord",
-    component: DisplayRecord
+    path: "/record/:id",
+    component: DisplayRecordView
+  },
+  {
+    path: "/notfound",
+    component: NotFound
   },
   {
     path: "*",

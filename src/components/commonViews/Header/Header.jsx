@@ -218,7 +218,7 @@ export class Header extends Component {
                   </NavLink>
                 </li>
               ))}
-            {isLoggedIn === isAdmin && (
+            {isAdmin && (
               <li>
                 <NavLink exact to="/admin">
                   admin

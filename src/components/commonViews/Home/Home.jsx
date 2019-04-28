@@ -29,24 +29,30 @@ export class Home extends Component {
     show: "red-flag",
     redFlagActive: "",
     interventionActive: "",
-    value: localStorage.getItem("comment")
+    value: localStorage.getItem("comment") | ""
   };
 
   componentWillMount = async () => {
-    this.setState({ loading: true });
-    const redflagRecords = await get(redflagURL, {
-      headers: {
-        Authorization: localStorage.getItem("token")
-      }
-    });
-    const { data } = redflagRecords.data;
+    const { token, isLoggedIn } = this.props;
+    if (!isLoggedIn) {
+      return <Redirect to="/" />;
+    } else {
+      this.setState({ loading: true });
+      const redflagRecords = await get(redflagURL, {
+        headers: {
+          Authorization: token
+        }
+      });
+      const { data } = redflagRecords.data;
 
-    this.setState({ loading: false, redflagRecords: data });
+      this.setState({ loading: false, redflagRecords: data });
 
-    this.setState({ loading: false, redFlagActive: "default" });
+      this.setState({ loading: false, redFlagActive: "default" });
+    }
   };
 
   handleRedflagSwitch = async () => {
+    const { token } = this.props;
     this.setState({
       loading: true,
       redFlagActive: "default",
@@ -55,7 +61,7 @@ export class Home extends Component {
     });
     const redflagRecords = await get(redflagURL, {
       headers: {
-        Authorization: localStorage.getItem("token")
+        Authorization: token
       }
     });
     const { data } = redflagRecords.data;
@@ -68,6 +74,7 @@ export class Home extends Component {
   };
 
   handleInterventionSwitch = async () => {
+    const { token } = this.props;
     this.setState({
       loading: true,
       redFlagActive: "",
@@ -76,7 +83,7 @@ export class Home extends Component {
     });
     const interventionRecords = await get(interventionURL, {
       headers: {
-        Authorization: localStorage.getItem("token")
+        Authorization: token
       }
     });
     const { data } = interventionRecords.data;
@@ -266,7 +273,11 @@ export class Home extends Component {
                     id="post-text-area"
                     name="comment"
                     onChange={this.handleChange}
-                    value={localStorage.getItem("comment") ? localStorage.getItem("comment"): value}
+                    value={
+                      localStorage.getItem("comment")
+                        ? localStorage.getItem("comment")
+                        : value
+                    }
                   />
                 }
 
@@ -325,11 +336,12 @@ export const mapDispatchToProps = dispatch =>
  * @return {JSX} returns javascript syntax extension
  */
 const mapStateToProps = ({ userData, modalData }) => {
-  const { isLoggedIn } = userData;
+  const { isLoggedIn, token } = userData;
   const { modalDisplay } = modalData;
   return {
     isLoggedIn,
-    modalDisplay
+    modalDisplay,
+    token
   };
 };
 
@@ -337,7 +349,8 @@ Home.propTypes = {
   isLoggedIn: bool.isRequired,
   modalDisplay: string.isRequired,
   triggerModalClose: func.isRequired,
-  triggerModalOpen: func.isRequired
+  triggerModalOpen: func.isRequired,
+  token: string.isRequired
 };
 
 export default connect(
