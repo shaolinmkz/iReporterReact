@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { string, number, array, func } from "prop-types";
 import { GoogleMapComponent } from "./GoogleMapPlaces.jsx";
 
@@ -26,7 +27,7 @@ const DisplayRecordCard = ({
         <span>{username}</span>
       </i>
       <br />
-      <h1> {title}</h1>
+      <h1> <Link to={`/record/${id}`}>{title}</Link></h1>
       <img src={incidentIcon} className="red-flag-icon" title="Red flag" />
       <div className="story">
         <p>{comment}</p>

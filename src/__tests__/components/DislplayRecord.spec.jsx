@@ -5,17 +5,25 @@ import sinon from "sinon";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../../redux/store";
-import HomePage, { Home } from "../../components/commonViews/Home/Home.jsx";
+import DisplayPage, {
+  DisplayRecord
+} from "../../components/commonViews/DisplayRecord/DisplayRecord.jsx";
 
-describe("HomePage component", () => {
-  it("should shallow render the HomePage component", () => {
-    const homePage = shallow(
-      <Home
+const matchObj = {
+  params: {
+    id: 2
+  }
+};
+describe("displayPage component", () => {
+  it("should shallow render the displayPage component", () => {
+    const displayPage = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token="mock_token"
+        match={matchObj}
       />
     );
     const e = {
@@ -29,35 +37,37 @@ describe("HomePage component", () => {
       }
     };
     sinon.stub(window, "scrollTo");
-    homePage.instance().scrollTop();
-    homePage.instance().closeModal(e);
-    homePage.instance().closeModal(e2);
-    expect(homePage.find("section.home-feeds").exists()).toBe(true);
+    displayPage.instance().scrollTop();
+    displayPage.instance().closeModal(e);
+    displayPage.instance().closeModal(e2);
+    expect(displayPage.find("section.home-feeds").exists()).toBe(true);
   });
 
-  it("should shallow render the HomePage component", () => {
-    const homePage = shallow(
-      <Home
+  it("should shallow render the displayPage component", () => {
+    const displayPage = shallow(
+      <DisplayRecord
         isLoggedIn={false}
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token="mock_token"
+        match={matchObj}
       />
     );
-    expect(homePage.find("section.home-feeds").exists()).toBe(false);
+    expect(displayPage.find("section.home-feeds").exists()).toBe(false);
   });
 
-  it("should mount render the HomePage component", () => {
+  it("should mount render the displayPage component", () => {
     mount(
       <Provider store={store}>
         <Router>
-          <HomePage
+          <DisplayPage
             isLoggedIn
             modalDisplay={"block"}
             triggerModalClose={jest.fn()}
             triggerModalOpen={jest.fn()}
             token="mock_token"
+            match={matchObj}
           />
         </Router>
       </Provider>
@@ -74,34 +84,7 @@ describe("Get Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should get regflag record as default", async () => {
-
-    const expectedResponse = {
-      data: [
-        {
-          mockData: "mock data"
-        }
-      ]
-    };
-
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
-      request.respondWith({ status: 200, response: expectedResponse });
-    });
-    const home = shallow(
-      <Home
-        isLoggedIn
-        modalDisplay={"block"}
-        triggerModalClose={jest.fn()}
-        triggerModalOpen={jest.fn()}
-        token="mock_token"
-      />
-    );
-    await home.instance().handleRedflagSwitch();
-  });
-
-  it("shold get redflag record", async () => {
-
+  it("should get a record", async () => {
     const expectedResponse = {
       data: [
         {
@@ -136,81 +119,108 @@ describe("Get Incident record", () => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
     });
-    const home = shallow(
-      <Home
+    const display = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token="mock_token"
+        match={matchObj}
       />
     );
-    await home.instance().handleInterventionSwitch();
+    await display.instance().componentWillMount();
+  });
+
+  it("should get a record", async () => {
+    const expectedResponse = {
+      data: [
+        {
+          comment:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
+          createdby: 11,
+          createdon: "2011-01-03T00:35:00.544Z",
+          email: "mock-email",
+          firstname: "mock-firstname",
+          id: 2,
+          images: [
+            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
+            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
+          ],
+          isadmin: false,
+          lastname: "mock-lastname",
+          location: "6.492631700, 3.348967100",
+          othername: "mock-othername",
+          phonenumber: "12345678901",
+          profileimage:
+            "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
+          status: "resolved",
+          title: "Stolen Passwords",
+          type: "intervention",
+          username: "mock-username",
+          videos: []
+        }
+      ]
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const display = shallow(
+      <DisplayRecord
+        isLoggedIn
+        modalDisplay={"block"}
+        triggerModalClose={jest.fn()}
+        triggerModalOpen={jest.fn()}
+        token="mock_token"
+        match={matchObj}
+      />
+    );
+    display.setState({ type: 'intervention' })
+    await display.instance().componentWillMount();
   });
 
   it("should get incident record when component mounts", async () => {
-
     const expectedResponse = {
-      data: [
-        {
-          comment:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
-          createdby: 11,
-          createdon: "2011-01-03T00:35:00.544Z",
-          email: "mock-email",
-          firstname: "mock-firstname",
-          id: 2,
-          images: [
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
-          ],
-          isadmin: false,
-          lastname: "mock-lastname",
-          location: "6.492631700, 3.348967100",
-          othername: "mock-othername",
-          phonenumber: "12345678901",
-          profileimage:
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
-          status: "resolved",
-          title: "Stolen Passwords",
-          type: "red-flag",
-          username: "mock-username",
-          videos: []
-        }
-      ]
+      status: 404,
+      message: "record not found"
     };
 
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
-      request.respondWith({ status: 200, response: expectedResponse });
+      request.respondWith({ status: 404, response: expectedResponse });
     });
-    const home = shallow(
-      <Home
+    const display = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token="mock_token"
+        match={matchObj}
       />
     );
-    await home.instance().componentWillMount();
+    display.setState({ status: 404 });
+    await display.instance().componentWillMount();
   });
 
   it("should handle the change method", async () => {
-    const home = shallow(
-      <Home
+    const display = shallow(
+      <DisplayRecord
         isLoggedIn
         modalDisplay={"block"}
         triggerModalClose={jest.fn()}
         triggerModalOpen={jest.fn()}
         token="mock_token"
+        match={matchObj}
       />
     );
     const e = {
       target: {
         value: "title"
       }
-    }
-    home.instance().handleChange(e);
+    };
+    display.instance().handleChange(e);
   });
 });

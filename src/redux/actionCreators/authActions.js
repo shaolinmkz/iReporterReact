@@ -39,7 +39,6 @@ export const stopLoading = () => ({ type: STOP_LOADING });
 export const storeInLocal = (token, user, localStorage) => {
   localStorage.token = token;
   localStorage.user = JSON.stringify(user);
-  localStorage.isLoggedIn = true;
 };
 
 /**
