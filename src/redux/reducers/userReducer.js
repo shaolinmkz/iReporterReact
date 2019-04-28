@@ -13,7 +13,7 @@ export const initialState = localStorage => ({
   isAdmin: Boolean(
     HelperUtils.verifyToken(localStorage.getItem("token")).isAdmin
   ),
-  token: localStorage.token,
+  token: localStorage.token || "",
   isLoggedIn: Boolean(HelperUtils.verifyToken(localStorage.getItem("token")))
 });
 

@@ -53,24 +53,27 @@ export class DisplayRecord extends Component {
    * @returns {JSX} JSX
    */
   componentWillMount = async () => {
-    const { match, token } = this.props;
+    const { match, token, isLoggedIn } = this.props;
     const recordId = match.params.id;
     const recordUrl = url;
-
-    this.setState({ loading: true });
-    try {
-      const redflagRecord = await get(`${recordUrl}/${recordId}`, {
-        headers: {
-          Authorization: token
-        }
-      });
-      const { data } = redflagRecord.data;
-      this.setState({ record: data[0], type: data[0].type });
-      this.setState({ loading: false });
-    } catch (err) {
-      const { status } = err.response.data;
-      this.setState({ loading: false, status });
-      return { err };
+    if (!isLoggedIn) {
+      return <Redirect to="/" />;
+    } else {
+      this.setState({ loading: true });
+      try {
+        const redflagRecord = await get(`${recordUrl}/${recordId}`, {
+          headers: {
+            Authorization: token
+          }
+        });
+        const { data } = redflagRecord.data;
+        this.setState({ record: data[0], type: data[0].type });
+        this.setState({ loading: false });
+      } catch (err) {
+        const { status } = err.response.data;
+        this.setState({ loading: false, status });
+        return { err };
+      }
     }
   };
 

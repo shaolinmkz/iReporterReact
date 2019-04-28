@@ -29,22 +29,26 @@ export class Home extends Component {
     show: "red-flag",
     redFlagActive: "",
     interventionActive: "",
-    value: localStorage.getItem("comment") | ''
+    value: localStorage.getItem("comment") | ""
   };
 
   componentWillMount = async () => {
-    const { token } = this.props;
-    this.setState({ loading: true });
-    const redflagRecords = await get(redflagURL, {
-      headers: {
-        Authorization: token
-      }
-    });
-    const { data } = redflagRecords.data;
+    const { token, isLoggedIn } = this.props;
+    if (!isLoggedIn) {
+      return <Redirect to="/" />;
+    } else {
+      this.setState({ loading: true });
+      const redflagRecords = await get(redflagURL, {
+        headers: {
+          Authorization: token
+        }
+      });
+      const { data } = redflagRecords.data;
 
-    this.setState({ loading: false, redflagRecords: data });
+      this.setState({ loading: false, redflagRecords: data });
 
-    this.setState({ loading: false, redFlagActive: "default" });
+      this.setState({ loading: false, redFlagActive: "default" });
+    }
   };
 
   handleRedflagSwitch = async () => {
@@ -269,7 +273,11 @@ export class Home extends Component {
                     id="post-text-area"
                     name="comment"
                     onChange={this.handleChange}
-                    value={localStorage.getItem("comment") ? localStorage.getItem("comment"): value}
+                    value={
+                      localStorage.getItem("comment")
+                        ? localStorage.getItem("comment")
+                        : value
+                    }
                   />
                 }
 
