@@ -19,7 +19,7 @@ export const initialState = {
 };
 
 /**
- * @description handles the login on change
+ * @description handles the record reducer
  * @param {object} state
  * @param {object} actionTypeAndPayload
  * @return {undefined}

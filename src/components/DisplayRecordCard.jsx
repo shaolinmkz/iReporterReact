@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { string, number, array, func } from "prop-types";
+import { string, number, array, func, bool } from "prop-types";
 import { GoogleMapComponent } from "./GoogleMapPlaces.jsx";
-
+import HelperUtils from "../utils/helperUtils";
 /**
  * @param {object} props
  * @returns {JSX} JSX
@@ -18,6 +18,9 @@ const DisplayRecordCard = ({
   images,
   videos,
   id,
+  token,
+  createdby,
+  show,
   onMouseDown
 }) => (
   <div className="post">
@@ -27,7 +30,10 @@ const DisplayRecordCard = ({
         <span>{username}</span>
       </i>
       <br />
-      <h1> <Link to={`/record/${id}`}>{title}</Link></h1>
+      <h1>
+        {" "}
+        <Link to={`/record/${id}`}>{title}</Link>
+      </h1>
       <img src={incidentIcon} className="red-flag-icon" title="Red flag" />
       <div className="story">
         <p>{comment}</p>
@@ -70,20 +76,21 @@ const DisplayRecordCard = ({
           <h3 style={{ color: "grey" }}>NO VIDEO EVIDENCE</h3>
         )}
       </div>
-      <div className="delete-record-container">
-        <button
-          className="blue edit"
-          onMouseEnter={() => {
-            localStorage.setItem("recordId", id);
-            localStorage.setItem(
-              "comment",
-              comment
-            );
-          }}
-          onMouseDown={onMouseDown}>
-          EDIT RECORD
-        </button>
-      </div>
+      {show && <div
+        className="delete-record-container">
+        {HelperUtils.verifyToken(token).id === createdby && (
+          <button
+            className="blue edit"
+            onMouseEnter={() => {
+              localStorage.setItem("recordId", id);
+              localStorage.setItem("comment", comment);
+            }}
+            onMouseDown={onMouseDown}>
+            EDIT RECORD
+          </button>
+        )}
+      </div>}
+      <br />
     </article>
   </div>
 );
@@ -99,7 +106,17 @@ DisplayRecordCard.propTypes = {
   images: array.isRequired,
   videos: array.isRequired,
   id: number.isRequired,
-  onMouseDown: func.isRequired
+  onMouseDown: func,
+  token: string,
+  createdby: number,
+  show: bool
+};
+
+DisplayRecordCard.defaultProps = {
+  token: "",
+  createdby: 0,
+  show: false,
+  onMouseDown: () => 'do nothing'
 };
 
 export default DisplayRecordCard;

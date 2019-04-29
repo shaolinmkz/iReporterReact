@@ -4,8 +4,8 @@ import About from "../components/commonViews/About/About.jsx";
 import HomeView from "../components/commonViews/Home/Home.jsx";
 import LandingPage from "../components/commonViews/LandingPage/LandingPage.jsx";
 import HowItWorks from "../components/commonViews/HowItWorks/HowItWorks.jsx";
-import Profile from "../components/commonViews/Profile/Profile.jsx";
-import Admin from "../components/commonViews/Admin/Admin.jsx";
+import ProfileView from "../components/commonViews/Profile/Profile.jsx";
+import AdminView from "../components/commonViews/Admin/Admin.jsx";
 import ReportView from "../components/commonViews/Report/Report.jsx";
 import DisplayRecordView from "../components/commonViews/DisplayRecord/DisplayRecord.jsx";
 import NotFound from "../components/commonViews/404/404.jsx";
@@ -33,11 +33,11 @@ const routeProps = [
   },
   {
     path: "/profile",
-    component: Profile
+    component: ProfileView
   },
   {
     path: "/admin",
-    component: Admin
+    component: AdminView
   },
   {
     path: "/report",

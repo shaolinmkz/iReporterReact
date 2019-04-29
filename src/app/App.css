@@ -126,9 +126,10 @@ body {
   overflow: hidden;
 }
 .profileLoader {
-  display: none;
   width: 50px;
   margin: 0 auto;
+  display: flex;
+  align-content: center;
 }
 .hover:hover {
   cursor: pointer;
@@ -477,6 +478,21 @@ div.logo-container {
 .attachment {
   width: 15px;
   height: 15px;
+}
+.default-toast {
+  z-index: 10000;
+}
+
+input#deleteCheck {
+  box-shadow: 1px 1px 1px 1px #162661;
+  cursor: pointer;
+}
+input#delete-a-record {
+  color: white;
+  background: rgb(211, 0, 0);
+}
+input#delete-a-record:hover {
+  background: rgb(255, 27, 27);
 }
 .crime-form-container form {
   text-align: center;

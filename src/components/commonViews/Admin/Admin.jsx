@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { bool, string } from "prop-types";
-// import { bindActionCreators } from "redux";
-// import { get } from "axios";
 import { connect } from "react-redux";
+import HelperUtils from "../../../utils/helperUtils";
 
 /**
  * @description stateful class based component that the admin page
@@ -20,16 +19,21 @@ export class Admin extends Component {
     this.state = {
       firstname: "",
       lastname: "",
-      image:
-        "",
+      image: "",
       username: "",
       email: "",
-      phoneNumber: ""
+      phoneNumber: "",
+      interventionRecord: [],
+      redflagRecord: [],
+      loading: false,
+      uploading: false,
+      newImage: localStorage.getItem("newImage")
     };
   }
 
   componentDidMount = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const { token } = this.props;
+    const user = HelperUtils.verifyToken(token);
 
     this.setState({
       firstname: user.firstname,
@@ -46,23 +50,16 @@ export class Admin extends Component {
    * @returns {JSX} JSX
    */
   loadProfileDetails = () => {
+    const { image, newImage } = this.state;
     return (
       <div className="profile-details-border">
         <img
-          src={this.state.image}
+          src={newImage ? newImage : image}
           alt="avatar"
           className="large-avatar"
           id="user-profile-image"
         />
         <br />
-        <label htmlFor="uploadProfileImage" className="theme-orange hover">
-          change image
-        </label>
-        <input type="file" id="uploadProfileImage" accept="image/*" />
-        <img
-          src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
-          className="profileLoader"
-        />
         <h1>
           {this.state.firstname}, {this.state.lastname}
         </h1>
@@ -193,7 +190,7 @@ export class Admin extends Component {
  * @param {object} dispatch
  * @return {JSX} returns javascript syntax extension
  */
-const mapStateToProps = ({ userData }) => {
+export const mapStateToProps = ({ userData }) => {
   const { isLoggedIn, token, isAdmin } = userData;
   return {
     isLoggedIn,

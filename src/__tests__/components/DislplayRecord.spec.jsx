@@ -226,6 +226,8 @@ describe("Get Incident record", () => {
       />
     );
     display.setState({ type: "intervention" });
+    sinon.stub(localStorage, 'getItem');
+    localStorage.setItem("updated", 'true')
     await display.instance().componentWillMount();
   });
 
@@ -265,10 +267,131 @@ describe("Get Incident record", () => {
       />
     );
     const e = {
+      preventDefault: jest.fn(),
       target: {
         value: "title"
       }
     };
+    const matchProp = {
+      params: {
+        id: 2
+      }
+    };
+    display.setProps({
+      lng: 112.32132214,
+      lat: -1.141442145,
+      match: matchProp,
+      token: HelperUtils.generateToken({ id: 2 }),
+      triggerEditLoading: jest.fn(),
+      stopDeleteLoading: jest.fn()
+    });
+    display.instance().handleChangeLocationSave(e);
+    display.instance().handleCommentSave(e);
     display.instance().handleChange(e);
   });
+  it("should handle the change method", async () => {
+    const display = shallow(
+      <DisplayRecord
+        isLoggedIn
+        modalDisplay={"block"}
+        triggerModalClose={jest.fn()}
+        triggerModalOpen={jest.fn()}
+        token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
+      />
+    );
+    display.setProps({ editLoading: true });
+  });
 });
+
+
+describe("Delete Incident record", () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+
+  it("should delete a record", async () => {
+    const expectedResponse = {
+      message: "deleted successfully"
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: expectedResponse });
+    });
+    const display = shallow(
+      <DisplayRecord
+        isLoggedIn
+        modalDisplay={"block"}
+        triggerModalClose={jest.fn()}
+        triggerModalOpen={jest.fn()}
+        token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
+      />
+    );
+    const e = {
+      preventDefault: jest.fn(),
+      target: {
+        value: "title"
+      }
+    };
+    const matchProp = {
+      params: {
+        id: 2
+      }
+    };
+    display.setProps({
+      match: matchProp,
+      token: HelperUtils.generateToken({ id: 2 }),
+      triggerEditLoading: jest.fn(),
+      stopDeleteLoading: jest.fn()
+    });
+    sinon.stub(localStorage, 'setItem');
+    sinon.stub(window.location, 'assign');
+    await display.instance().handleDelete(e);
+  });
+
+  it("should throw a 400 on attempt to delete a record", async () => {
+    const expectedResponse = {
+      message: "delete failed"
+    };
+
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 400, response: expectedResponse });
+    });
+    const display = shallow(
+      <DisplayRecord
+        isLoggedIn
+        modalDisplay={"block"}
+        triggerModalClose={jest.fn()}
+        triggerModalOpen={jest.fn()}
+        token={HelperUtils.generateToken(sampleUser)}
+        match={matchObj}
+      />
+    );
+    const e = {
+      preventDefault: jest.fn(),
+      target: {
+        value: "title"
+      }
+    };
+    const matchProp = {
+      params: {
+        id: 2
+      }
+    };
+    display.setProps({
+      match: matchProp,
+      token: HelperUtils.generateToken({ id: 2 }),
+      triggerEditLoading: jest.fn(),
+      stopDeleteLoading: jest.fn()
+    });
+    await display.instance().handleDelete(e);
+  });
+});
+

@@ -1,4 +1,5 @@
 import React from "react";
+import sinon from "sinon";
 import { shallow, mount } from "enzyme";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -7,7 +8,11 @@ import ReportComp, {
   Report
 } from "../../components/commonViews/Report/Report.jsx";
 
+sinon.stub(window, "scroll");
+sinon.stub(window.location, "assign");
+
 const report = new Report();
+
 
 describe("Test the Report component with mount", () => {
   const mockFunc = jest.fn();
