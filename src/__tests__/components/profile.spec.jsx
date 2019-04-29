@@ -1,7 +1,6 @@
 import "babel-polyfill";
 import React from "react";
 import moxios from "moxios";
-import sinon from "sinon";
 import { shallow, mount } from "enzyme";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -11,9 +10,6 @@ import {
   mapStateToProps
 } from "../../components/commonViews/Profile/Profile.jsx";
 import HelperUtils from "../../utils/helperUtils";
-
-sinon.stub(window, "scroll");
-sinon.stub(window.location, "assign");
 
 const mockFunc = jest.fn();
 
@@ -157,7 +153,7 @@ describe("Mock the Profile component", () => {
     moxios.uninstall();
   });
   it("It should mock fetch red flag count method for success", async done => {
-    moxios.wait(async () => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
@@ -167,7 +163,6 @@ describe("Mock the Profile component", () => {
     const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-
     await profileWrapper3.instance().fetchRedflagCount();
     done();
   });
@@ -182,7 +177,7 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag count method for errors", async done => {
+  it("It should mock fetch red flag count method for errors", done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -193,7 +188,7 @@ describe("Mock the Profile component with shallow", () => {
     const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await profileWrapper3.instance().fetchRedflagCount();
+    profileWrapper3.instance().fetchRedflagCount();
     done();
   });
 });
