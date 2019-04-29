@@ -61,7 +61,7 @@ describe("Test the Profile component with shallow", () => {
     await profileWrapper2.instance().componentDidMount();
   });
 
-  it("It should mock the map state to prop function", (done) => {
+  it("It should mock the map state to prop function", done => {
     const userReducer = {
       userData: {
         isLoggedIn: true,
@@ -126,22 +126,6 @@ describe("Mock the Profile component with shallow", () => {
     );
 
     await profileWrapper3.instance().handleImageUpload(e);
-  });
-
-  it("It should mock profile image upload method for errors", async done => {
-    jest.setTimeout(50000);
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
-      request.respondWith({
-        status: 400,
-        response: { message: "mock_response" }
-      });
-    });
-    const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
-    );
-    await profileWrapper3.instance().handleImageUpload(e);
-    done();
   });
 
   it("It should mock fetch red flag count method for success", async () => {
@@ -291,6 +275,33 @@ describe("Mock the Profile component with shallow", () => {
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
     await profileWrapper3.instance().updateProfileImage();
+    done();
+  });
+});
+
+describe("Mock the Profile component with shallow", () => {
+  beforeEach(() => {
+    moxios.install();
+  });
+
+  afterEach(() => {
+    moxios.uninstall();
+  });
+  it("It should mock profile image upload method for errors", async done => {
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({
+        status: 400,
+        response: { message: "mock_response" }
+      });
+    });
+    const profileWrapper3 = shallow(
+      <Profile
+        isLoggedIn={true}
+        token={HelperUtils.generateToken(mockUser)}
+      />
+    );
+    await profileWrapper3.instance().handleImageUpload(e);
     done();
   });
 });
