@@ -35,6 +35,9 @@ const mockUser = {
 };
 
 describe("Test the Profile component with mount", () => {
+  beforeEach(() => {
+    jest.setTimeout(10000);
+  });
   const profileWrapper = mount(
     <Provider store={store}>
       <Router>
@@ -52,6 +55,9 @@ describe("Test the Profile component with mount", () => {
 });
 
 describe("Test the Profile component with shallow", () => {
+  beforeEach(() => {
+    jest.setTimeout(10000);
+  });
   const profileWrapper2 = shallow(
     <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
   );
@@ -83,6 +89,9 @@ describe("Test the Profile component with shallow", () => {
   });
 });
 describe("Test the Profile component", () => {
+  beforeEach(() => {
+    jest.setTimeout(10000);
+  });
   const profileWrapperII = shallow(
     <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
   );
@@ -98,6 +107,9 @@ describe("Test the Profile component", () => {
 });
 
 describe("Test the Profile component with shallow for offline users", () => {
+  beforeEach(() => {
+    jest.setTimeout(10000);
+  });
   const profileWrapper2 = shallow(
     <Profile isLoggedIn={false} token={HelperUtils.generateToken(mockUser)} />
   );
@@ -110,6 +122,7 @@ describe("Test the Profile component with shallow for offline users", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -136,6 +149,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -143,14 +157,14 @@ describe("Mock the Profile component", () => {
     moxios.uninstall();
   });
   it("It should mock fetch red flag count method for success", async done => {
-    await moxios.wait(async () => {
-      const request = await moxios.requests.mostRecent();
+    moxios.wait(async () => {
+      const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
 
@@ -161,6 +175,7 @@ describe("Mock the Profile component", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -185,6 +200,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -210,6 +226,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -234,6 +251,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -259,6 +277,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -283,6 +302,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -308,6 +328,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -332,6 +353,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -357,6 +379,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -381,6 +404,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(10000);
     moxios.install();
   });
 
