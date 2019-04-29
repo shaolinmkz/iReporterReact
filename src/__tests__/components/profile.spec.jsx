@@ -129,7 +129,7 @@ describe("Mock the Profile component with shallow", () => {
   });
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component", () => {
   beforeEach(() => {
     moxios.install();
   });
@@ -138,14 +138,14 @@ describe("Mock the Profile component with shallow", () => {
     moxios.uninstall();
   });
   it("It should mock fetch red flag count method for success", async () => {
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
+    await moxios.wait( async () => {
+      const request = await moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = shallow(
+    const profileWrapper3 = await shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
 
