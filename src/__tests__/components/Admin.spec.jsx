@@ -1,8 +1,7 @@
 import "babel-polyfill";
 import React from "react";
-import moxios from "moxios";
 import sinon from "sinon";
-import { shallow, mount } from "enzyme";
+import { mount } from "enzyme";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "../../redux/store";
@@ -15,14 +14,14 @@ import HelperUtils from "../../utils/helperUtils";
 sinon.stub(window, "scroll");
 sinon.stub(window.location, "assign");
 
-const mockFunc = jest.fn();
+// const mockFunc = jest.fn();
 
-const e = {
-  preventDefault: mockFunc,
-  target: {
-    files: ["file1", "file2"]
-  }
-};
+// const e = {
+//   preventDefault: mockFunc,
+//   target: {
+//     files: ["file1", "file2"]
+//   }
+// };
 
 const mockUser = {
   firstname: "mockUser",
@@ -49,7 +48,7 @@ describe("Test the Admin component with mount", () => {
   it("It should render the Admin component and find an HTML section tag", () => {
     expect(AdminWrapper.find("section#admin").exists()).toBe(true);
   });
-  
+
   it("It should mock the map state to prop function", done => {
     const userReducer = {
       userData: {
