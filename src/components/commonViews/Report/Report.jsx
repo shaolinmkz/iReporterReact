@@ -43,6 +43,9 @@ export class Report extends Component {
     this.handleLineBreaks = this.handleLineBreaks.bind(this);
   }
 
+  componentDidMount = () => {
+    window.scroll(0,0);
+  };
   /**
    * @description handles form field change
    * @param {object} e

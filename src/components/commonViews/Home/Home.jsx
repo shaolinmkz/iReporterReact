@@ -13,8 +13,6 @@ import {
   openModalAction
 } from "../../../redux/actionCreators/modalActions";
 import DisplayRecordCard from "../../DisplayRecordCard.jsx";
-import ModalComp from "../../Modal.jsx";
-import GoogleSuggest from "../../GoogleMapPlaces.jsx";
 
 /**
  * @description Home
@@ -115,10 +113,9 @@ export class Home extends Component {
       loading,
       show,
       redFlagActive,
-      interventionActive,
-      value
+      interventionActive
     } = this.state;
-    const { isLoggedIn, modalDisplay, triggerModalOpen } = this.props;
+    const { isLoggedIn } = this.props;
     if (!isLoggedIn) {
       return <Redirect to="/" />;
     }
@@ -166,7 +163,6 @@ export class Home extends Component {
                   location={record.location}
                   images={record.images}
                   videos={record.videos}
-                  onMouseDown={triggerModalOpen}
                 />
               ))}
             </section>
@@ -187,7 +183,6 @@ export class Home extends Component {
                   location={record.location}
                   images={record.images}
                   videos={record.videos}
-                  onMouseDown={triggerModalOpen}
                 />
               ))}
             </section>
@@ -214,103 +209,6 @@ export class Home extends Component {
             }}
           />
         </span>
-
-        {
-          <ModalComp
-            parentStyle={{ display: modalDisplay }}
-            innerBox={{ overflow: "scroll", height: "80%" }}
-            onClick={this.closeModal}>
-            <a
-              href="#delete-a-record"
-              id="toggleMover"
-              title="scroll down to reveal more features"
-              style={{
-                background: "#162661",
-                position: "fixed",
-                left: "1em",
-                top: "4em",
-                display: "inline-block",
-                padding: "0.5em",
-                borderRadius: "50%"
-              }}>
-              <i
-                className="fas fa-angle-double-down"
-                title="scroll down to reveal more features"
-                style={{
-                  fontSize: "2em",
-                  color: "white"
-                }}
-              />
-            </a>
-            <div id="parentFlexModal">
-              <h1 className="font-setting">RECORD MANAGER</h1>
-              <form>
-                <h2 className="font-setting">LOCATION</h2>
-                <GoogleSuggest
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    fontSize: "1.5em",
-                    border: "1px solid #162661"
-                  }}
-                />
-                <input
-                  type="submit"
-                  value="SAVE LOCATION"
-                  style={{
-                    color: "white"
-                  }}
-                />
-              </form>
-
-              <form>
-                <h2 className="font-setting">COMMENT</h2>
-                {
-                  <textarea
-                    required
-                    placeholder="Edit your story..."
-                    className="post-text-area"
-                    id="post-text-area"
-                    name="comment"
-                    onChange={this.handleChange}
-                    value={
-                      localStorage.getItem("comment")
-                        ? localStorage.getItem("comment")
-                        : value
-                    }
-                  />
-                }
-
-                <input
-                  type="submit"
-                  value="SAVE COMMENT"
-                  style={{ color: "white" }}
-                />
-              </form>
-
-              <form>
-                <h2 style={{ color: "red" }}>DELETE</h2>
-                <input
-                  required
-                  type="checkbox"
-                  style={{
-                    boxShadow: "1px 1px 1px 1px #162661",
-                    cursor: "pointer"
-                  }}
-                />
-                <span style={{ color: "red" }}>
-                  * Note that clicking the delete button will delete this record
-                </span>
-                <input
-                  id="delete-a-record"
-                  type="submit"
-                  value="DELETE RECORD"
-                  style={{ color: "white", background: "red" }}
-                />
-              </form>
-            </div>
-          </ModalComp>
-        }
       </Fragment>
     );
   };

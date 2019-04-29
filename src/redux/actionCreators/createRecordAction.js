@@ -1,5 +1,6 @@
 import "babel-polyfill";
 import { post } from "axios";
+import { Redirect } from "react-router-dom";
 import { toast, ToastType } from "react-toastify";
 import notifyUser from "../../components/Toast.jsx";
 import { interventionURL, redflagURL } from "./endPoints";
@@ -10,7 +11,6 @@ import {
   CREATE_NEW_RECORD,
   STOP_GENERAL_LOADING
 } from "../actionTypes";
-
 
 /**
  * @description function for creating an action for loading
@@ -57,7 +57,8 @@ export const redflagCreatenAction = async RecordRequestObject => {
     const { message, id } = response.data.data[0];
 
     toast(notifyUser(message), { type: ToastType.SUCCESS });
-    localStorage.setItem("newRecordId", id);
+
+    window.location.assign(`/record/${id}`);
     // return action type and payload to reducer
     return {
       type: CREATE_NEW_RECORD,
@@ -90,7 +91,8 @@ export const interventionCreateAction = async RecordRequestObject => {
     const { message, id } = response.data.data[0];
 
     toast(notifyUser(message), { type: ToastType.SUCCESS });
-    localStorage.setItem("newRecordId", id);
+  
+    window.location.assign(`/record/${id}`);
     // return action type and payload to reducer
     return {
       type: CREATE_NEW_RECORD,

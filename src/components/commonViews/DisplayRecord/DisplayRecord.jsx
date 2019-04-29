@@ -1,14 +1,25 @@
 import React, { Component, Fragment } from "react";
 import { Redirect } from "react-router-dom";
-import { bool, string, func, object as objectProp } from "prop-types";
+import { bool, string, func, object as objectProp, number } from "prop-types";
 import { bindActionCreators } from "redux";
-import { get } from "axios";
+import { get, delete as axiosDelete } from "axios";
+import { toast, ToastType } from "react-toastify";
 import { connect } from "react-redux";
-import { redflagURL as url } from "../../../redux/actionCreators/endPoints";
+import {
+  interventionURL as incidentURL,
+  redflagURL as url
+} from "../../../redux/actionCreators/endPoints";
+import notifyUser from "../../Toast.jsx";
 import {
   closeModalAction,
   openModalAction
 } from "../../../redux/actionCreators/modalActions";
+import {
+  editLoadingAction,
+  editLocationAction,
+  editCommentAction,
+  stopEditLoadingAction
+} from "../../../redux/actionCreators/modifiyRecordAction";
 import DisplayRecordCard from "../../DisplayRecordCard.jsx";
 import ModalComp from "../../Modal.jsx";
 import GoogleSuggest from "../../GoogleMapPlaces.jsx";
@@ -75,6 +86,10 @@ export class DisplayRecord extends Component {
         return { err };
       }
     }
+    if (localStorage.getItem("updated")) {
+      localStorage.removeItem("updated");
+      toast(notifyUser("Updated Successfully"), { type: ToastType.SUCCESS });
+    }
   };
 
   handleChange = e => {
@@ -97,10 +112,65 @@ export class DisplayRecord extends Component {
     }
   };
 
+  handleChangeLocationSave = e => {
+    e.preventDefault();
+    const {
+      lng,
+      lat,
+      match,
+      editLocation,
+      token,
+      triggerEditLoading
+    } = this.props;
+    const recordId = match.params.id;
+    const requestObject = {
+      location: `${lat}, ${lng}`
+    };
+
+    triggerEditLoading();
+    editLocation(requestObject, recordId, token);
+  };
+  handleDelete = async e => {
+    e.preventDefault();
+    const { match, token, triggerEditLoading, stopDeleteLoading } = this.props;
+    const recordId = match.params.id;
+    triggerEditLoading();
+    try {
+      await axiosDelete(`${incidentURL}/${recordId}`, {
+        headers: {
+          Authorization: token
+        }
+      });
+      localStorage.setItem("deleted", "true");
+      window.location.assign("/profile");
+    } catch (err) {
+      const { error } = err.response.data;
+      toast(notifyUser(error), { type: ToastType.ERROR });
+      stopDeleteLoading();
+    }
+  };
+  handleCommentSave = e => {
+    e.preventDefault();
+    const { value } = this.state;
+    const { editComment, match, token, triggerEditLoading } = this.props;
+    const recordId = match.params.id;
+    const requestObject = {
+      comment: value
+    };
+    triggerEditLoading();
+    editComment(requestObject, recordId, token);
+  };
+
   render = () => {
     document.title = "Record";
     const { record, loading, value, type, status } = this.state;
-    const { isLoggedIn, modalDisplay, triggerModalOpen } = this.props;
+    const {
+      isLoggedIn,
+      modalDisplay,
+      triggerModalOpen,
+      token,
+      editLoading
+    } = this.props;
     if (!isLoggedIn) {
       return <Redirect to="/" />;
     }
@@ -134,7 +204,10 @@ export class DisplayRecord extends Component {
                 location={record.location}
                 images={record.images}
                 videos={record.videos}
+                createdby={record.createdby}
                 onMouseDown={triggerModalOpen}
+                token={token}
+                show
               />
             </section>
           )}
@@ -152,12 +225,15 @@ export class DisplayRecord extends Component {
                 location={record.location}
                 images={record.images}
                 videos={record.videos}
+                createdby={record.createdby}
                 onMouseDown={triggerModalOpen}
+                token={token}
+                show
               />
             </section>
           )}
         </section>
-        {
+        {modalDisplay === "block" && (
           <ModalComp
             parentStyle={{ display: modalDisplay }}
             innerBox={{ overflow: "scroll", height: "80%" }}
@@ -186,7 +262,7 @@ export class DisplayRecord extends Component {
             </a>
             <div id="parentFlexModal">
               <h1 className="font-setting">RECORD MANAGER</h1>
-              <form>
+              <form onSubmit={this.handleChangeLocationSave}>
                 <h2 className="font-setting">LOCATION</h2>
                 <GoogleSuggest
                   style={{
@@ -196,16 +272,37 @@ export class DisplayRecord extends Component {
                     border: "1px solid #162661"
                   }}
                 />
-                <input
-                  type="submit"
-                  value="SAVE LOCATION"
-                  style={{
-                    color: "white"
-                  }}
-                />
+                {!editLoading && (
+                  <input
+                    type="submit"
+                    value="SAVE LOCATION"
+                    style={{
+                      color: "white"
+                    }}
+                  />
+                )}
+                {editLoading && (
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "block",
+                      textAlign: "center"
+                    }}>
+                    <img
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                        textAlign: "center",
+                        marginTop: "3em"
+                      }}
+                      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
+                      className="uploadLoader"
+                    />
+                  </span>
+                )}
               </form>
 
-              <form>
+              <form onSubmit={this.handleCommentSave}>
                 <h2 className="font-setting">COMMENT</h2>
                 {
                   <textarea
@@ -223,36 +320,72 @@ export class DisplayRecord extends Component {
                   />
                 }
 
-                <input
-                  type="submit"
-                  value="SAVE COMMENT"
-                  style={{ color: "white" }}
-                />
+                {!editLoading && (
+                  <input
+                    type="submit"
+                    value="SAVE COMMENT"
+                    style={{ color: "white" }}
+                  />
+                )}
+                {editLoading && (
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "block",
+                      textAlign: "center"
+                    }}>
+                    <img
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                        textAlign: "center",
+                        marginTop: "3em"
+                      }}
+                      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
+                      className="uploadLoader"
+                    />
+                  </span>
+                )}
               </form>
 
-              <form>
-                <h2 style={{ color: "red" }}>DELETE</h2>
-                <input
-                  required
-                  type="checkbox"
-                  style={{
-                    boxShadow: "1px 1px 1px 1px #162661",
-                    cursor: "pointer"
-                  }}
-                />
-                <span style={{ color: "red" }}>
+              <form onSubmit={this.handleDelete}>
+                <h2 style={{ color: "#C53F2E", padding: "1em 0" }}>DELETE</h2>
+                <input required type="checkbox" id="deleteCheck" />
+                <label
+                  style={{ color: "red", cursor: "pointer" }}
+                  htmlFor="deleteCheck">
                   * Note that clicking the delete button will delete this record
-                </span>
-                <input
-                  id="delete-a-record"
-                  type="submit"
-                  value="DELETE RECORD"
-                  style={{ color: "white", background: "red" }}
-                />
+                </label>
+                {!editLoading && (
+                  <input
+                    id="delete-a-record"
+                    type="submit"
+                    value="DELETE RECORD"
+                  />
+                )}
+                {editLoading && (
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "block",
+                      textAlign: "center"
+                    }}>
+                    <img
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                        textAlign: "center",
+                        marginTop: "3em"
+                      }}
+                      src="https://res.cloudinary.com/shaolinmkz/image/upload/v1550933449/loader_blue.gif"
+                      className="uploadLoader"
+                    />
+                  </span>
+                )}
               </form>
             </div>
           </ModalComp>
-        }
+        )}
       </Fragment>
     );
   };
@@ -267,7 +400,11 @@ export const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       triggerModalClose: closeModalAction,
-      triggerModalOpen: openModalAction
+      triggerModalOpen: openModalAction,
+      triggerEditLoading: editLoadingAction,
+      editLocation: editLocationAction,
+      editComment: editCommentAction,
+      stopDeleteLoading: stopEditLoadingAction
     },
     dispatch
   );
@@ -277,13 +414,18 @@ export const mapDispatchToProps = dispatch =>
  * @param {object} dispatch
  * @return {JSX} returns javascript syntax extension
  */
-const mapStateToProps = ({ userData, modalData }) => {
+const mapStateToProps = ({ userData, modalData, recordData, modifyData }) => {
   const { isLoggedIn, token } = userData;
   const { modalDisplay } = modalData;
+  const { lng, lat } = recordData;
+  const { editLoading } = modifyData;
   return {
     isLoggedIn,
     modalDisplay,
-    token
+    token,
+    lng,
+    lat,
+    editLoading
   };
 };
 
@@ -293,7 +435,24 @@ DisplayRecord.propTypes = {
   triggerModalClose: func.isRequired,
   triggerModalOpen: func.isRequired,
   match: objectProp.isRequired,
-  token: string.isRequired
+  token: string.isRequired,
+  lng: number,
+  lat: number,
+  editLoading: bool,
+  editLocation: func,
+  triggerEditLoading: func,
+  editComment: func,
+  stopDeleteLoading: func
+};
+
+DisplayRecord.defaultProps = {
+  lng: 6,
+  lat: 2,
+  editLoading: false,
+  editLocation: () => "do nothing",
+  triggerEditLoading: () => "do nothing",
+  editComment: () => "do nothing",
+  stopDeleteLoading: () => "do nothing"
 };
 
 export default connect(
