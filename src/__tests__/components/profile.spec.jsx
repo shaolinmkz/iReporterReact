@@ -34,7 +34,7 @@ const mockUser = {
   id: 2
 };
 
-describe("Test the Profile component with mount", () => {
+describe("Test the Profile component with mount", done => {
   const profileWrapper = mount(
     <Provider store={store}>
       <Router>
@@ -46,19 +46,22 @@ describe("Test the Profile component with mount", () => {
     </Provider>
   );
   localStorage.setItem("user", JSON.stringify(mockUser));
-  it("It should render the Profile component and find an HTML section tag", () => {
+  it("It should render the Profile component and find an HTML section tag", done => {
     expect(profileWrapper.find("section#profile").exists()).toBe(true);
+    done();
   });
+  done();
 });
 
-describe("Test the Profile component with shallow", () => {
+describe("Test the Profile component with shallow", done => {
   const profileWrapper2 = shallow(
     <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
   );
 
-  it("It should run the profile methods", async () => {
+  it("It should run the profile methods", async done => {
     localStorage.setItem("deleted", "true");
     await profileWrapper2.instance().componentDidMount();
+    done();
   });
 
   it("It should mock the map state to prop function", done => {
@@ -75,36 +78,41 @@ describe("Test the Profile component with shallow", () => {
     done();
   });
 
-  it("It should run the profile methods", async () => {
+  it("It should run the profile methods", async done => {
     localStorage.setItem("deleted", "true");
     await profileWrapper2.instance().componentDidMount();
+    done();
   });
 });
-describe("Test the Profile component", () => {
+describe("Test the Profile component", done => {
   const profileWrapperII = shallow(
     <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
   );
 
-  it("It should run the profile methods", () => {
+  it("It should run the profile methods", done => {
     profileWrapperII.setState({
       interventionRecord: [{ title: " this is a title", id: 2 }],
       redflagRecord: [{ title: " this is a title", id: 2 }]
     });
     profileWrapperII.instance().render();
+    done();
   });
+  done();
 });
 
-describe("Test the Profile component with shallow for offline users", () => {
+describe("Test the Profile component with shallow for offline users", done => {
   const profileWrapper2 = shallow(
     <Profile isLoggedIn={false} token={HelperUtils.generateToken(mockUser)} />
   );
 
-  it("It should redirect offline users to the home page", async () => {
+  it("It should redirect offline users to the home page", async done => {
     expect(profileWrapper2.find("Redirect").exists()).toBe(true);
+    done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", done => {
   beforeEach(() => {
     moxios.install();
   });
@@ -113,7 +121,7 @@ describe("Mock the Profile component with shallow", () => {
     moxios.uninstall();
   });
 
-  it("It should mock profile image upload method for success", async () => {
+  it("It should mock profile image upload method for success", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -126,10 +134,12 @@ describe("Mock the Profile component with shallow", () => {
     );
 
     await profileWrapper3.instance().handleImageUpload(e);
+    done();
   });
+  done();
 });
 
-describe("Mock the Profile component", () => {
+describe("Mock the Profile component", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -137,8 +147,8 @@ describe("Mock the Profile component", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag count method for success", async () => {
-    await moxios.wait( async () => {
+  it("It should mock fetch red flag count method for success", async (done) => {
+    await moxios.wait(async () => {
       const request = await moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
@@ -150,10 +160,12 @@ describe("Mock the Profile component", () => {
     );
 
     await profileWrapper3.instance().fetchRedflagCount();
+    done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -175,9 +187,10 @@ describe("Mock the Profile component with shallow", () => {
     await profileWrapper3.instance().fetchRedflagCount();
     done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -185,7 +198,7 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention count method for success", async () => {
+  it("It should mock fetch intervention count method for success", async (done) => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -198,10 +211,12 @@ describe("Mock the Profile component with shallow", () => {
     );
 
     await profileWrapper3.instance().fetchInterventionCount();
+    done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -223,9 +238,10 @@ describe("Mock the Profile component with shallow", () => {
     await profileWrapper3.instance().fetchInterventionCount();
     done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -233,7 +249,7 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag record method for success", async () => {
+  it("It should mock fetch red flag record method for success", async (done) => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -246,10 +262,12 @@ describe("Mock the Profile component with shallow", () => {
     );
 
     await profileWrapper3.instance().fetchRedflagRecord();
+    done()
   });
+  done()
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -271,9 +289,10 @@ describe("Mock the Profile component with shallow", () => {
     await profileWrapper3.instance().fetchRedflagRecord();
     done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -281,7 +300,7 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention record method for success", async () => {
+  it("It should mock fetch intervention record method for success", async (done) => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -294,10 +313,12 @@ describe("Mock the Profile component with shallow", () => {
     );
 
     await profileWrapper3.instance().fetchInterventionRecord();
+    done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -319,9 +340,10 @@ describe("Mock the Profile component with shallow", () => {
     await profileWrapper3.instance().fetchInterventionRecord();
     done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -329,7 +351,7 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock upload to cloudinary method for success", async () => {
+  it("It should mock upload to cloudinary method for success", async (done) => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -342,10 +364,12 @@ describe("Mock the Profile component with shallow", () => {
     );
 
     await profileWrapper3.instance().updateProfileImage();
+    done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -367,9 +391,10 @@ describe("Mock the Profile component with shallow", () => {
     await profileWrapper3.instance().updateProfileImage();
     done();
   });
+  done();
 });
 
-describe("Mock the Profile component with shallow", () => {
+describe("Mock the Profile component with shallow", (done) => {
   beforeEach(() => {
     moxios.install();
   });
@@ -391,4 +416,5 @@ describe("Mock the Profile component with shallow", () => {
     await profileWrapper3.instance().handleImageUpload(e);
     done();
   });
+  done();
 });
