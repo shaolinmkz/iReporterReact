@@ -129,6 +129,7 @@ describe("Mock the Profile component with shallow", () => {
   });
 
   it("It should mock profile image upload method for errors", async done => {
+    jest.setTimeout(50000);
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
