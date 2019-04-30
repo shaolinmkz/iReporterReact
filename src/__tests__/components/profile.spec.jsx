@@ -152,18 +152,18 @@ describe("Mock the Profile component", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag count method for success", async done => {
-    await moxios.wait(() => {
+  it("It should mock fetch red flag count method for success", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await profileWrapper3.instance().fetchRedflagCount();
+    profileWrapper3.instance().fetchRedflagCount();
     done();
   });
 });
@@ -177,18 +177,18 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag count method for errors", async done => {
-    await moxios.wait(() => {
+  it("It should mock fetch red flag count method for errors", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 400,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await profileWrapper3.instance().fetchRedflagCount();
+    profileWrapper3.instance().fetchRedflagCount();
     done();
   });
 });
@@ -202,19 +202,19 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention count method for success", async done => {
-    await moxios.wait(() => {
+  it("It should mock fetch intervention count method for success", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
 
-    await profileWrapper3.instance().fetchInterventionCount();
+    profileWrapper3.instance().fetchInterventionCount();
     done();
   });
 });
@@ -228,45 +228,44 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention count method for errors", async done => {
-    await moxios.wait(() => {
+  it("It should mock fetch intervention count method for errors", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 400,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await expect(
-      profileWrapper3.instance().fetchInterventionCount()
-    ).resolves.toEqual(expect.any(Object));
+    profileWrapper3.instance().fetchInterventionCount();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
+    jest.setTimeout(50000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag record method for success", async done => {
-    await moxios.wait(() => {
+  it("It should mock fetch red flag record method for success", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
 
-    await profileWrapper3.instance().fetchRedflagRecord();
+    profileWrapper3.instance().fetchRedflagRecord();
     done();
   }, 20000);
 });
@@ -305,19 +304,19 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention record method for success", async done => {
-    await moxios.wait(() => {
+  it("It should mock fetch intervention record method for success", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
 
-    await profileWrapper3.instance().fetchInterventionRecord();
+    profileWrapper3.instance().fetchInterventionRecord();
     done();
   });
 });
@@ -331,18 +330,18 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention record method for errors", async done => {
-    await moxios.wait(() => {
+  it("It should mock fetch intervention record method for errors", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 400,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await profileWrapper3.instance().fetchInterventionRecord();
+    profileWrapper3.instance().fetchInterventionRecord();
     done();
   });
 });
@@ -356,19 +355,19 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock upload to cloudinary method for success", async done => {
-    await moxios.wait(() => {
+  it("It should mock upload to cloudinary method for success", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
 
-    await profileWrapper3.instance().updateProfileImage();
+    profileWrapper3.instance().updateProfileImage();
     done();
   });
 });
@@ -382,18 +381,18 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock upload to cloudinary method for errors", async done => {
-    await moxios.wait(() => {
+  it("It should mock upload to cloudinary method for errors", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 400,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await profileWrapper3.instance().updateProfileImage();
+    profileWrapper3.instance().updateProfileImage();
     done();
   });
 });
@@ -407,18 +406,18 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock profile image upload method for errors", async done => {
-    await moxios.wait(() => {
+  it("It should mock profile image upload method for errors", done => {
+    moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 400,
         response: { message: "mock_response" }
       });
     });
-    const profileWrapper3 = await shallow(
+    const profileWrapper3 = shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await profileWrapper3.instance().handleImageUpload(e);
+    profileWrapper3.instance().handleImageUpload(e);
     done();
   });
 });
