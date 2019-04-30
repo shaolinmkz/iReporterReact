@@ -246,7 +246,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(50000);
+    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -267,7 +267,7 @@ describe("Mock the Profile component with shallow", () => {
 
     profileWrapper3.instance().fetchRedflagRecord();
     done();
-  }, 20000);
+  });
 });
 
 describe("Mock the Profile component with shallow", () => {
