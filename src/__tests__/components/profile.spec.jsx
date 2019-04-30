@@ -239,7 +239,9 @@ describe("Mock the Profile component with shallow", () => {
     const profileWrapper3 = await shallow(
       <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
     );
-    await profileWrapper3.instance().fetchInterventionCount();
+    await expect(
+      profileWrapper3.instance().fetchInterventionCount()
+    ).resolves.toEqual(expect.any(Object));
     done();
   });
 });
@@ -252,7 +254,7 @@ describe("Mock the Profile component with shallow", () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag record method for success", async (done) => {
+  it("It should mock fetch red flag record method for success", async done => {
     await moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
