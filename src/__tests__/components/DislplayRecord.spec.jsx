@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import React from "react";
 import { mount, shallow } from "enzyme";
 import moxios from "moxios";
@@ -132,7 +133,7 @@ describe("Get Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should get a record", async () => {
+  it("should get a record", () => {
     const expectedResponse = {
       data: [
         {
@@ -177,10 +178,10 @@ describe("Get Incident record", () => {
         match={matchObj}
       />
     );
-    await display.instance().componentWillMount();
+    display.instance().componentWillMount();
   });
 
-  it("should get a record", async () => {
+  it("should get a record", () => {
     const expectedResponse = {
       data: [
         {
@@ -226,12 +227,12 @@ describe("Get Incident record", () => {
       />
     );
     display.setState({ type: "intervention" });
-    sinon.stub(localStorage, 'getItem');
-    localStorage.setItem("updated", 'true')
-    await display.instance().componentWillMount();
+    sinon.stub(localStorage, "getItem");
+    localStorage.setItem("updated", "true");
+    display.instance().componentWillMount();
   });
 
-  it("should get incident record when component mounts", async () => {
+  it("should get incident record when component mounts", () => {
     const expectedResponse = {
       status: 404,
       message: "record not found"
@@ -252,10 +253,10 @@ describe("Get Incident record", () => {
       />
     );
     display.setState({ status: 404 });
-    await display.instance().componentWillMount();
+    display.instance().componentWillMount();
   });
 
-  it("should handle the change method", async () => {
+  it("should handle the change method", () => {
     const display = shallow(
       <DisplayRecord
         isLoggedIn
@@ -289,7 +290,7 @@ describe("Get Incident record", () => {
     display.instance().handleCommentSave(e);
     display.instance().handleChange(e);
   });
-  it("should handle the change method", async () => {
+  it("should handle the change method", () => {
     const display = shallow(
       <DisplayRecord
         isLoggedIn
@@ -304,7 +305,6 @@ describe("Get Incident record", () => {
   });
 });
 
-
 describe("Delete Incident record", () => {
   beforeEach(() => {
     moxios.install();
@@ -314,7 +314,7 @@ describe("Delete Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should delete a record", async () => {
+  it("should delete a record", () => {
     const expectedResponse = {
       message: "deleted successfully"
     };
@@ -350,12 +350,12 @@ describe("Delete Incident record", () => {
       triggerEditLoading: jest.fn(),
       stopDeleteLoading: jest.fn()
     });
-    sinon.stub(localStorage, 'setItem');
-    sinon.stub(window.location, 'assign');
-    await display.instance().handleDelete(e);
+    sinon.stub(localStorage, "setItem");
+    sinon.stub(window.location, "assign");
+    display.instance().handleDelete(e);
   });
 
-  it("should throw a 400 on attempt to delete a record", async () => {
+  it("should throw a 400 on attempt to delete a record", () => {
     const expectedResponse = {
       message: "delete failed"
     };
@@ -391,7 +391,6 @@ describe("Delete Incident record", () => {
       triggerEditLoading: jest.fn(),
       stopDeleteLoading: jest.fn()
     });
-    await display.instance().handleDelete(e);
+    display.instance().handleDelete(e);
   });
 });
-

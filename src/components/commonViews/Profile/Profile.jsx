@@ -213,8 +213,9 @@ export class Profile extends Component {
       });
       return this.setState({ uploading: false, image: secureUrl });
     } catch (err) {
+      const { error } = err.response.data;
       this.setState({ uploading: false });
-      toast(notifyUser("Profile image failed to update"), {
+      toast(notifyUser(error), {
         type: ToastType.ERROR
       });
       return err;

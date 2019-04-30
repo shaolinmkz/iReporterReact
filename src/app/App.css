@@ -96,12 +96,14 @@ body {
 }
 #updateLocationLoader,
 #updateCommentLoader,
-#updateStatusLoader,
 #deleteLoader,
 #adminRecordLoader {
   display: none;
   width: 50px;
   margin-bottom: -20px;
+}
+#updateStatusLoader {
+  width: 12%;
 }
 #generalMessage {
   position: fixed;
