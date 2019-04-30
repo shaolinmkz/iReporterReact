@@ -120,7 +120,7 @@ describe("Mock the Admin component with shallow", () => {
     moxios.uninstall();
   });
 
-  it("It should mock Admin page for fetch red-flag recordn for success", async done => {
+  it("It should mock Admin page for fetch red-flag recordn for success", done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -139,12 +139,12 @@ describe("Mock the Admin component with shallow", () => {
         onChange={() => "do nothing"}
       />
     );
-    await AdminView.instance().fetchRedflag();
+    AdminView.instance().fetchRedflag();
     AdminView.instance().handleUpdate(1, "rejected", "this is a title");
     done();
   });
 
-  it("It should mock Admin page for fetch red-flag errors",  done => {
+  it("It should mock Admin page for fetch red-flag errors", done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -177,7 +177,7 @@ describe("Mock the Admin component with shallow", () => {
     moxios.uninstall();
   });
 
-  it("It should mock Admin page for intervention success", async done => {
+  it("It should mock Admin page for intervention success", done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -196,10 +196,10 @@ describe("Mock the Admin component with shallow", () => {
         onChange={() => "do nothing"}
       />
     );
-    await AdminView.instance().fetchIntervention();
+    AdminView.instance().fetchIntervention();
     done();
   });
-  it("It should mock Admin page for fect intervention", async done => {
+  it("It should mock Admin page for fect intervention", done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -218,7 +218,7 @@ describe("Mock the Admin component with shallow", () => {
         onChange={() => "do nothing"}
       />
     );
-    await AdminView.instance().fetchIntervention();
+    AdminView.instance().fetchIntervention();
     done();
   });
 });
@@ -233,7 +233,7 @@ describe("Mock the Admin component submit handler", () => {
     moxios.uninstall();
   });
 
-  it("It should mock Admin submit method for errors", async done => {
+  it("It should mock Admin submit method for errors", done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -252,7 +252,7 @@ describe("Mock the Admin component submit handler", () => {
         onChange={() => "do nothing"}
       />
     );
-    await AdminView.instance().handleSubmit(e);
+    AdminView.instance().handleSubmit(e);
     done();
   });
   it("It should mock Admin submit method for success", done => {

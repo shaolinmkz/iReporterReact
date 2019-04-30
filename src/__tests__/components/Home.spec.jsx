@@ -202,7 +202,7 @@ describe("Get Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should get regflag record as default", async done => {
+  it("should get regflag record as default", done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
@@ -221,11 +221,11 @@ describe("Get Incident record", () => {
       interventionRecords: mockRecord
     });
     home.setProps({ token: HelperUtils.generateToken(sampleUser) });
-    await home.instance().handleRedflagSwitch();
+    home.instance().handleRedflagSwitch();
     done();
   });
 
-  it("should get redflag record", async () => {
+  it("should get redflag record", () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
@@ -243,10 +243,10 @@ describe("Get Incident record", () => {
       redflagRecords: mockRecord,
       interventionRecords: mockRecord
     });
-    await home.instance().handleInterventionSwitch();
+    home.instance().handleInterventionSwitch();
   });
 
-  it("should get incident record when component mounts", async () => {
+  it("should get incident record when component mounts", () => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
@@ -265,10 +265,10 @@ describe("Get Incident record", () => {
       interventionRecords: mockRecord
     });
     home.setProps({ token: HelperUtils.generateToken(sampleUser) });
-    await home.instance().componentWillMount();
+    home.instance().componentWillMount();
   });
 
-  it("should handle the change method", async () => {
+  it("should handle the change method", () => {
     const home = shallow(
       <Home
         isLoggedIn
