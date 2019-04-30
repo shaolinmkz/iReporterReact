@@ -246,14 +246,13 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(50000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag record method for success", async done => {
+  it("It should mock fetch red flag record method for success", async (done) => {
     await moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -267,7 +266,7 @@ describe("Mock the Profile component with shallow", () => {
 
     await profileWrapper3.instance().fetchRedflagRecord();
     done();
-  });
+  }, 20000);
 });
 
 describe("Mock the Profile component with shallow", () => {
