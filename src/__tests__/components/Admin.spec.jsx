@@ -144,7 +144,7 @@ describe("Mock the Admin component with shallow", () => {
     done();
   });
 
-  it("It should mock Admin page for fetch red-flag errors", async done => {
+  it("It should mock Admin page for fetch red-flag errors",  done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -163,7 +163,7 @@ describe("Mock the Admin component with shallow", () => {
         onChange={() => "do nothing"}
       />
     );
-    await AdminView.instance().fetchRedflag();
+    AdminView.instance().fetchRedflag();
     done();
   });
 });

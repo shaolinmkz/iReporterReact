@@ -50,6 +50,36 @@ const mockRecord = {
   videos: []
 };
 
+const expectedResponse = {
+  data: [
+    {
+      comment:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
+      createdby: 11,
+      createdon: "2011-01-03T00:35:00.544Z",
+      email: "mock-email",
+      firstname: "mock-firstname",
+      id: 2,
+      images: [
+        "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
+        "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
+      ],
+      isadmin: false,
+      lastname: "mock-lastname",
+      location: "6.492631700, 3.348967100",
+      othername: "mock-othername",
+      phonenumber: "12345678901",
+      profileimage:
+        "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
+      status: "resolved",
+      title: "Stolen Passwords",
+      type: "red-flag",
+      username: "mock-username",
+      videos: []
+    }
+  ]
+};
+
 /**
  * @description Mocks the user reducer
  * @returns {object} Returns the initial state.
@@ -94,7 +124,6 @@ const rootReducer = combineReducers({
 });
 
 createStore(rootReducer, applyMiddleware(ReduxPromise));
-
 
 describe("HomePage component", () => {
   it("should shallow render the HomePage component", () => {
@@ -173,37 +202,7 @@ describe("Get Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should get regflag record as default", async () => {
-    const expectedResponse = {
-      data: [
-        {
-          comment:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
-          createdby: 11,
-          createdon: "2011-01-03T00:35:00.544Z",
-          email: "mock-email",
-          firstname: "mock-firstname",
-          id: 2,
-          images: [
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
-          ],
-          isadmin: false,
-          lastname: "mock-lastname",
-          location: "6.492631700, 3.348967100",
-          othername: "mock-othername",
-          phonenumber: "12345678901",
-          profileimage:
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
-          status: "resolved",
-          title: "Stolen Passwords",
-          type: "red-flag",
-          username: "mock-username",
-          videos: []
-        }
-      ]
-    };
-
+  it("should get regflag record as default", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
@@ -223,39 +222,10 @@ describe("Get Incident record", () => {
     });
     home.setProps({ token: HelperUtils.generateToken(sampleUser) });
     await home.instance().handleRedflagSwitch();
+    done();
   });
 
   it("should get redflag record", async () => {
-    const expectedResponse = {
-      data: [
-        {
-          comment:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
-          createdby: 11,
-          createdon: "2011-01-03T00:35:00.544Z",
-          email: "mock-email",
-          firstname: "mock-firstname",
-          id: 2,
-          images: [
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
-          ],
-          isadmin: false,
-          lastname: "mock-lastname",
-          location: "6.492631700, 3.348967100",
-          othername: "mock-othername",
-          phonenumber: "12345678901",
-          profileimage:
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
-          status: "resolved",
-          title: "Stolen Passwords",
-          type: "red-flag",
-          username: "mock-username",
-          videos: []
-        }
-      ]
-    };
-
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
@@ -277,36 +247,6 @@ describe("Get Incident record", () => {
   });
 
   it("should get incident record when component mounts", async () => {
-    const expectedResponse = {
-      data: [
-        {
-          comment:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae orci dolor. Nunc commodo ligula non aliquam placerat. Donec a rhoncus mi. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed semper bibendum convallis. Praesent faucibus massa tristique, vehicula nisl accumsan, malesuada diam. Nulla sed erat imperdiet mi venenatis sagittis vitae id est. Vivamus elementum dictum maximus",
-          createdby: 11,
-          createdon: "2011-01-03T00:35:00.544Z",
-          email: "mock-email",
-          firstname: "mock-firstname",
-          id: 2,
-          images: [
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475677/dctwibggbv9qqardw9ow.jpg",
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1546475692/wht3xahnwzrhysjkbmzg.jpg"
-          ],
-          isadmin: false,
-          lastname: "mock-lastname",
-          location: "6.492631700, 3.348967100",
-          othername: "mock-othername",
-          phonenumber: "12345678901",
-          profileimage:
-            "https://res.cloudinary.com/shaolinmkz/image/upload/v1544370726/avatar.png",
-          status: "resolved",
-          title: "Stolen Passwords",
-          type: "red-flag",
-          username: "mock-username",
-          videos: []
-        }
-      ]
-    };
-
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({ status: 200, response: expectedResponse });
