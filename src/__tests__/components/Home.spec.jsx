@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import React from "react";
 import { mount, shallow } from "enzyme";
 import moxios from "moxios";
@@ -224,7 +225,7 @@ describe("Get Incident record", () => {
     await home.instance().handleRedflagSwitch();
   });
 
-  it("shold get redflag record", async () => {
+  it("should get redflag record", async () => {
     const expectedResponse = {
       data: [
         {
