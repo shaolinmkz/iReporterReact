@@ -133,7 +133,7 @@ describe("Get Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should get a record", () => {
+  it("should get a record", async () => {
     const expectedResponse = {
       data: [
         {
@@ -178,10 +178,10 @@ describe("Get Incident record", () => {
         match={matchObj}
       />
     );
-    display.instance().componentWillMount();
+    await display.instance().componentWillMount();
   });
 
-  it("should get a record", () => {
+  it("should get a record", async () => {
     const expectedResponse = {
       data: [
         {
@@ -229,10 +229,10 @@ describe("Get Incident record", () => {
     display.setState({ type: "intervention" });
     sinon.stub(localStorage, "getItem");
     localStorage.setItem("updated", "true");
-    display.instance().componentWillMount();
+    await display.instance().componentWillMount();
   });
 
-  it("should get incident record when component mounts", () => {
+  it("should get incident record when component mounts", async () => {
     const expectedResponse = {
       status: 404,
       message: "record not found"
@@ -253,7 +253,7 @@ describe("Get Incident record", () => {
       />
     );
     display.setState({ status: 404 });
-    display.instance().componentWillMount();
+    await display.instance().componentWillMount();
   });
 
   it("should handle the change method", () => {
@@ -314,7 +314,7 @@ describe("Delete Incident record", () => {
     moxios.uninstall();
   });
 
-  it("should delete a record", () => {
+  it("should delete a record", async () => {
     const expectedResponse = {
       message: "deleted successfully"
     };
@@ -352,10 +352,10 @@ describe("Delete Incident record", () => {
     });
     sinon.stub(localStorage, "setItem");
     sinon.stub(window.location, "assign");
-    display.instance().handleDelete(e);
+    await display.instance().handleDelete(e);
   });
 
-  it("should throw a 400 on attempt to delete a record", () => {
+  it("should throw a 400 on attempt to delete a record", async () => {
     const expectedResponse = {
       message: "delete failed"
     };
@@ -391,6 +391,6 @@ describe("Delete Incident record", () => {
       triggerEditLoading: jest.fn(),
       stopDeleteLoading: jest.fn()
     });
-    display.instance().handleDelete(e);
+    await display.instance().handleDelete(e);
   });
 });

@@ -30,41 +30,33 @@ const mockUser = {
   id: 2
 };
 
+const token = HelperUtils.generateToken(mockUser);
+
 describe("Test the Profile component with mount", () => {
-  beforeEach(() => {
-    jest.setTimeout(10000);
-  });
+  beforeEach(() => {});
   const profileWrapper = mount(
     <Provider store={store}>
       <Router>
-        <Profile
-          isLoggedIn={true}
-          token={HelperUtils.generateToken(mockUser)}
-        />
+        <Profile isLoggedIn={true} token={token} />
       </Router>
     </Provider>
   );
   localStorage.setItem("user", JSON.stringify(mockUser));
-  it("It should render the Profile component and find an HTML section tag", () => {
+  test("It should render the Profile component and find an HTML section tag", () => {
     expect(profileWrapper.find("section#profile").exists()).toBe(true);
   });
 });
 
 describe("Test the Profile component with shallow", () => {
-  beforeEach(() => {
-    jest.setTimeout(10000);
-  });
-  const profileWrapper2 = shallow(
-    <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
-  );
+  const profileWrapper2 = shallow(<Profile isLoggedIn={true} token={token} />);
 
-  it("It should run the profile methods", done => {
+  test("It should run the profile methods", done => {
     localStorage.setItem("deleted", "true");
     profileWrapper2.instance().componentDidMount();
     done();
   });
 
-  it("It should mock the map state to prop function", done => {
+  test("It should mock the map state to prop function", done => {
     const userReducer = {
       userData: {
         isLoggedIn: true,
@@ -78,39 +70,31 @@ describe("Test the Profile component with shallow", () => {
     done();
   });
 
-  it("It should run the profile methods", done => {
+  test("It should run the profile methods", done => {
     localStorage.setItem("deleted", "true");
     profileWrapper2.instance().componentDidMount();
     done();
   });
 });
 describe("Test the Profile component", () => {
-  beforeEach(() => {
-    jest.setTimeout(10000);
-  });
-  const profileWrapperII = shallow(
-    <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
-  );
+  beforeEach(() => {});
+  const profileWrapperII = shallow(<Profile isLoggedIn={true} token={token} />);
 
-  it("It should run the profile methods", done => {
+  test("It should run the profile methods", async done => {
     profileWrapperII.setState({
       interventionRecord: [{ title: " this is a title", id: 2 }],
       redflagRecord: [{ title: " this is a title", id: 2 }]
     });
-    profileWrapperII.instance().render();
+    await profileWrapperII.instance().render();
     done();
   });
 });
 
 describe("Test the Profile component with shallow for offline users", () => {
-  beforeEach(() => {
-    jest.setTimeout(10000);
-  });
-  const profileWrapper2 = shallow(
-    <Profile isLoggedIn={false} token={HelperUtils.generateToken(mockUser)} />
-  );
+  beforeEach(() => {});
+  const profileWrapper2 = shallow(<Profile isLoggedIn={false} token={token} />);
 
-  it("It should redirect offline users to the home page", done => {
+  test("It should redirect offline users to the home page", async done => {
     expect(profileWrapper2.find("Redirect").exists()).toBe(true);
     done();
   });
@@ -118,7 +102,6 @@ describe("Test the Profile component with shallow for offline users", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
@@ -126,7 +109,7 @@ describe("Mock the Profile component with shallow", () => {
     moxios.uninstall();
   });
 
-  it("It should mock profile image upload method for success", done => {
+  test("It should mock profile image upload method for success", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -135,24 +118,23 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
 
-    profileWrapper3.instance().handleImageUpload(e);
+    await profileWrapper3.instance().handleImageUpload(e);
     done();
   });
 });
 
 describe("Mock the Profile component", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag count method for success", done => {
+  test("It should mock fetch red flag count method for success", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -161,23 +143,22 @@ describe("Mock the Profile component", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
-    profileWrapper3.instance().fetchRedflagCount();
+    await profileWrapper3.instance().fetchRedflagCount();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag count method for errors", done => {
+  test("It should mock fetch red flag count method for errors", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -186,23 +167,22 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
-    profileWrapper3.instance().fetchRedflagCount();
+    await profileWrapper3.instance().fetchRedflagCount();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention count method for success", done => {
+  test("It should mock fetch intervention count method for success", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -211,24 +191,23 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
 
-    profileWrapper3.instance().fetchInterventionCount();
+    await profileWrapper3.instance().fetchInterventionCount();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention count method for errors", done => {
+  test("It should mock fetch intervention count method for errors", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -237,23 +216,22 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
-    profileWrapper3.instance().fetchInterventionCount();
+    await profileWrapper3.instance().fetchInterventionCount();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag record method for success", done => {
+  test("It should mock fetch red flag record method for success", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -262,24 +240,23 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
 
-    profileWrapper3.instance().fetchRedflagRecord();
+    await profileWrapper3.instance().fetchRedflagRecord();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch red flag record method for errors", done => {
+  test("It should mock fetch red flag record method for errors", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -288,23 +265,22 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
-    profileWrapper3.instance().fetchRedflagRecord();
+    await profileWrapper3.instance().fetchRedflagRecord();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention record method for success", done => {
+  test("It should mock fetch intervention record method for success", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -313,24 +289,23 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
 
-    profileWrapper3.instance().fetchInterventionRecord();
+    await profileWrapper3.instance().fetchInterventionRecord();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock fetch intervention record method for errors", done => {
+  test("It should mock fetch intervention record method for errors", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -339,23 +314,22 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
-    profileWrapper3.instance().fetchInterventionRecord();
+    await profileWrapper3.instance().fetchInterventionRecord();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock upload to cloudinary method for success", done => {
+  test("It should mock upload to cloudinary method for success", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -364,24 +338,23 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
 
-    profileWrapper3.instance().updateProfileImage();
+    await profileWrapper3.instance().updateProfileImage();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock upload to cloudinary method for errors", done => {
+  test("It should mock upload to cloudinary method for errors", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -390,23 +363,22 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
-    profileWrapper3.instance().updateProfileImage();
+    await profileWrapper3.instance().updateProfileImage();
     done();
   });
 });
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
     moxios.install();
   });
 
   afterEach(() => {
     moxios.uninstall();
   });
-  it("It should mock profile image upload method for errors", done => {
+  test("It should mock profile image upload method for errors", async done => {
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
@@ -415,9 +387,9 @@ describe("Mock the Profile component with shallow", () => {
       });
     });
     const profileWrapper3 = shallow(
-      <Profile isLoggedIn={true} token={HelperUtils.generateToken(mockUser)} />
+      <Profile isLoggedIn={true} token={token} />
     );
-    profileWrapper3.instance().handleImageUpload(e);
+    await profileWrapper3.instance().handleImageUpload(e);
     done();
   });
 });
