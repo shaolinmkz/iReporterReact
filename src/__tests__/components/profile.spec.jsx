@@ -246,7 +246,7 @@ describe("Mock the Profile component with shallow", () => {
 
 describe("Mock the Profile component with shallow", () => {
   beforeEach(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(50000);
     moxios.install();
   });
 
