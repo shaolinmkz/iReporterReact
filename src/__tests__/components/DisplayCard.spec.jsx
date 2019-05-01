@@ -50,6 +50,6 @@ describe("Display Record component", () => {
     ).toBe(true);
     displayCardWrapper
       .find("div.delete-record-container > button.blue.edit")
-      .simulate("mouseenter");
+      .simulate("touchstart");
   });
 });
