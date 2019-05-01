@@ -85,6 +85,10 @@ const DisplayRecordCard = ({
               localStorage.setItem("recordId", id);
               localStorage.setItem("comment", comment);
             }}
+            onMouseEnter={() => {
+              localStorage.setItem("recordId", id);
+              localStorage.setItem("comment", comment);
+            }}
             onMouseDown={onMouseDown}>
             EDIT RECORD
           </button>
