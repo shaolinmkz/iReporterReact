@@ -81,6 +81,10 @@ const DisplayRecordCard = ({
         {HelperUtils.verifyToken(token).id === createdby && (
           <button
             className="blue edit"
+            onTouchStart={() => {
+              localStorage.setItem("recordId", id);
+              localStorage.setItem("comment", comment);
+            }}
             onMouseEnter={() => {
               localStorage.setItem("recordId", id);
               localStorage.setItem("comment", comment);
